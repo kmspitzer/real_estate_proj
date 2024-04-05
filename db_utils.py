@@ -13,7 +13,7 @@ class CustomJSONEncoder(json.JSONEncoder):
 def db_connect():
     cnx = mysql.connector.connect(
                 user='root', 
-                password='hello1234', 
+                password=passwd, 
                 host='localhost', 
                 database='real_estate_proj'
     )
