@@ -9,7 +9,7 @@ from datetime import date
 def db_connect():
     cnx = mysql.connector.connect(
                 user='root', 
-                password='password', 
+                password='hello1234', 
                 host='localhost', 
                 database='real_estate_proj'
     )
@@ -34,7 +34,31 @@ def db_get_table(tbl):
         cursor.close()
         conn.close()
 
-# Function to insert a new client record into the database
+
+# function to insert a new agent record into the database
+def insert_agent(data):
+    conn, cursor = db_connect()
+    
+    query = (
+        "INSERT INTO agents (first_name, last_name, "
+        "address_line_1, address_line_2, city, state, zip, "
+        "phone, start_date, created_at) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())"
+    )
+    
+    try:
+        cursor.execute(query, data)
+        conn.commit()
+        return cursor.lastrowid  # return the auto_increment client_id of the new record
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# function to insert a new client record into the database
 def insert_client(data):
     conn, cursor = db_connect()
     
