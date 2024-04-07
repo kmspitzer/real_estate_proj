@@ -1,0 +1,3 @@
+# Ignore credentials files and python cache files
+*.env
+*.pyc
