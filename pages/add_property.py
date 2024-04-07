@@ -1,6 +1,6 @@
 import streamlit as st
 from menu import property_menu
-from pages.get_agents import get_agents
+from pages.get_players import get_players
 from utilities.db_utils import *
 
 from config.re_config import state_list
@@ -11,7 +11,7 @@ from config.re_config import state_list
 ######################
 
 # get agent names for association
-agent_names, agent_mapping = get_agents()
+agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
 
 # display the appropriate sidebar nav
 property_menu()
@@ -149,15 +149,29 @@ with st.form("property_form"):
             # get the agent_id from our mapping
             agent_id = agent_mapping.get(agent_name)
 
-            # collect the data into a tuple
-            data = (address_line_1, address_line_2, city, state, zip,
-                    original_listing_price_value, sold_price_value, type, sqft_value, bedrooms_value,
-                    bathrooms_value, year_built, on_market, off_market, agent_id, sold
-            )
+            # collect the data into a dictionary
+            data = {
+                    "address_line_1": address_line_1,
+                    "address_line_2": address_line_2,
+                    "city": city,
+                    "state": state,
+                    "zip": zip,
+                    "original_listing_price": original_listing_price_value,
+                    "sold_price": sold_price_value,
+                    "type": type,
+                    "sqft": sqft_value,
+                    "bedrooms": bedrooms_value,
+                    "bathrooms": bathrooms_value,
+                    "year_built": year_built,
+                    "on_market": on_market,
+                    "off_market": off_market,
+                    "agent_id": agent_id,
+                    "sold": sold
+            }
 
             # call the function to insert the record into the database
-            property_id = insert_property(data)
-            if property_id:
-                st.success(f"Property added with ID: {property_id}")
+            success = insert_property(data)
+            if success:
+                st.success(f"Property added.")
             else:
                 st.error("An error occurred while adding the property.")

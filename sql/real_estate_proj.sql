@@ -72,6 +72,7 @@ create table appointments (
     property_id integer NOT NULL,
     tour_datetime timestamp NOT NULL,
     outcome varchar(50),
+    created_at timestamp,
     primary key (agent_id, client_id, property_id, tour_datetime),
     constraint appt_agent_fk
 		foreign key (agent_id) references agents (agent_id)
@@ -87,5 +88,5 @@ create table appointments (
         references properties (property_id)
         on delete cascade
 		on update restrict,
-	constraint check_outcomes check(lower(outcome) in ('uninterested', 'interested', 'make offer', 'buy'))
+    constraint check_outcomes check (lower(outcome) IN ('uninterested', 'interested', 'make offer', 'buy') or outcome is null
 );

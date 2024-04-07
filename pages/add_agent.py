@@ -80,14 +80,22 @@ with st.form("agent_form"):
         # if all fields are valid, proceed to process the form
         if validation_successful:
 
-            # collect the data into a tuple
-            data = (first_name, last_name, address_line_1, address_line_2, city, state, zip,
-                     phone, start_date
-            )
+            # collect the data into a dictionary
+            data = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "address_line_1": address_line_1,
+                "address_line_2": address_line_2,
+                "city": city,
+                "state": state,
+                "zip": zip,
+                "phone": phone,
+                "start_date": start_date
+            }
 
             # call the function to insert the record into the database
-            agent_id = insert_agent(data)
-            if agent_id:
-                st.success(f"Agent added with ID: {agent_id}")
+            success = insert_agent(data)
+            if success:
+                st.success(f"Agent added.")
             else:
                 st.error("An error occurred while adding the agent.")

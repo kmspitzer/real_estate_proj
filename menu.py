@@ -75,7 +75,7 @@ def appointment_menu():
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
         st.sidebar.page_link("pages/add_appointment.py", label="-->> Add Appointment")
-        st.sidebar.page_link("pages/manage_appointments.py", label="-->> View/Edit Appointments")
+        st.sidebar.page_link("pages/view_edit_appointments.py", label="-->> View/Edit Appointments")
 
 
 def unauthenticated_menu():
