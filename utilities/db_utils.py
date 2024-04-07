@@ -1,17 +1,20 @@
 import pandas as pd
 import mysql.connector
-import json
 from datetime import date
+import os
+from dotenv import load_dotenv
 
 
+dotenv_path = os.path.join('.', 'credentials.env')
+load_dotenv(dotenv_path)
 
 # database connection function
 def db_connect():
     cnx = mysql.connector.connect(
-                user='root', 
-                password='password', 
-                host='localhost', 
-                database='real_estate_proj'
+                user=os.getenv('DBUSER'), 
+                password=os.getenv('DBPASSWORD'), 
+                host=os.getenv('HOST'), 
+                database=os.getenv('DBNAME')
     )
 
     return cnx, cnx.cursor(dictionary=True)
