@@ -2,13 +2,22 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import IntegrityError, ProgrammingError
 from datetime import date
-
-
+import os
+from dotenv import load_dotenv
 
 # database connection function
 def db_connect():
+
+    dotenv_path = os.path.join('.', 'credentials.env')
+    load_dotenv(dotenv_path)
+
+    user=os.getenv('DBUSER')
+    password=os.getenv('DBPASSWORD') 
+    host=os.getenv('HOST')
+    database=os.getenv('DBNAME')
+
     # SQLAlchemy connection string
-    connection_str = 'mysql+mysqlconnector://root:password@localhost/real_estate_proj'
+    connection_str = "mysql+mysqlconnector://{{user}}:{{password}}@{{host}}/{{database}}".format(user, password, host, database)
     # Create and return the engine
     engine = create_engine(connection_str)
     return engine
