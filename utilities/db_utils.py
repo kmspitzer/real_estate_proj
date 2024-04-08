@@ -17,7 +17,7 @@ def db_connect():
     database=os.getenv('DBNAME')
 
     # SQLAlchemy connection string
-    connection_str = "mysql+mysqlconnector://{{user}}:{{password}}@{{host}}/{{database}}".format(user, password, host, database)
+    connection_str = f'mysql://{user}:{password}@{host}/{database}'
     # Create and return the engine
     engine = create_engine(connection_str)
     return engine
