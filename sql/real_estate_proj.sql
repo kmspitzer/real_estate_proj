@@ -89,4 +89,4 @@ create table appointments (
         on delete cascade
 		on update restrict,
     constraint check_outcomes check (lower(outcome) IN ('uninterested', 'interested', 'make offer', 'buy') or outcome is null
-);
+));
