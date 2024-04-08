@@ -17,6 +17,8 @@ def authenticated_menu():
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
 def property_menu():
+    if 'role' not in st.session_state:
+        st.session_state.role = 'Agent'
     # show a navigation menu for users with access to property functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -32,6 +34,8 @@ def property_menu():
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
 def agent_menu():
+    if 'role' not in st.session_state:
+        st.session_state = 'Agent Manager'
     # show a navigation menu for users with access to agent functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -47,6 +51,8 @@ def agent_menu():
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
 def client_menu():
+    if 'role' not in st.session_state:
+        st.session_state.role = 'Agent'
     # show a navigation menu for users with access to client functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -63,6 +69,8 @@ def client_menu():
     
 
 def appointment_menu():
+    if 'role' not in st.session_state:
+        st.session_state.role = 'Agent'
     # show a navigation menu for users with access to appointment functions
     st.sidebar.page_link("app.py", label="Switch user type")
     st.sidebar.write("")

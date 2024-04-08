@@ -8,9 +8,11 @@ from dotenv import load_dotenv
 # database connection function
 def db_connect():
 
+    # read in env
     dotenv_path = os.path.join('.', 'credentials.env')
     load_dotenv(dotenv_path)
 
+    # pull required vars
     user=os.getenv('DBUSER')
     password=os.getenv('DBPASSWORD') 
     host=os.getenv('HOST')
@@ -18,17 +20,19 @@ def db_connect():
 
     # SQLAlchemy connection string
     connection_str = f'mysql://{user}:{password}@{host}/{database}'
-    # Create and return the engine
+  
+    # create and return the engine
     engine = create_engine(connection_str)
     return engine
+
 
 # function to get contents of requested table
 def db_get_table(tbl):
     engine = db_connect()
 
     try:
-        query = f"SELECT * FROM {tbl}"
-        # Use the engine directly with pandas
+        query = f"select * from {tbl}"
+        # use the engine directly with pandas
         df = pd.read_sql_query(query, engine)
         return df
     
@@ -43,21 +47,23 @@ def insert_agent(data):
 
     # format insert statement
     sql_statement = text("""
-        INSERT INTO agents (
+        insert into agents (
             first_name, last_name, address_line_1, address_line_2, city, state, zip, 
             phone, start_date, created_at
-        ) VALUES (
+        ) values (
             :first_name, :last_name, :address_line_1, :address_line_2, :city, :state, :zip, 
             :phone, :start_date, NOW()
         )
-    """)
+    """
+                         )
 
+    # execute database insert
     try:
         with engine.connect() as connection:
-            # Execute the query with named parameters provided in 'data'
+            # execute the query with named parameters provided in 'data'
             connection.execute(sql_statement, data)
             connection.commit()
-            return True  # Or you might want to return something specific
+            return True
     except ProgrammingError as e:
         print(f"Insert failed: {e}")
         return False
@@ -69,14 +75,15 @@ def insert_appointment(data):
 
     # format insert statement
     sql_statement = text("""
-        INSERT INTO appointments (
+        insert into appointments (
             agent_id, client_id, property_id, tour_datetime, outcome, created_at
-        ) VALUES (
+        ) values (
             :agent_id, :client_id, :property_id,
             :tour_datetime, :outcome, NOW()
         )
     """)
 
+    # execute database insert
     try:
         with engine.connect() as connection:
             connection.execute(sql_statement, data)
@@ -86,28 +93,30 @@ def insert_appointment(data):
         print(f"Insert failed: {e}")
         return False
 
+
 # function to insert a new client record into the database
 def insert_client(data):
     engine = db_connect()
 
     # format insert statement
     sql_statement = text("""
-        INSERT INTO clients (
+        insert into clients (
             first_name, last_name, budget, preferred_move_date,
             address_line_1, address_line_2, city, state, zip,
             phone, status, agent_id, sold, created_at
-        ) VALUES (
+        ) values (
             :first_name, :last_name, :budget, :preferred_move_date,
             :address_line_1, :address_line_2, :city, :state, :zip,
             :phone, :status, :agent_id, :sold, NOW()
         )
     """)
 
+    # execute database insert
     try:
         with engine.connect() as connection:
             connection.execute(sql_statement, data)
             connection.commit()
-            return True  # If you need to return specific data, adjust this accordingly
+            return True
     except ProgrammingError as e:
         print(f"Insert failed: {e}")
         return False
@@ -119,23 +128,22 @@ def insert_property(data):
     
     # format insert statement
     sql_statement = text("""
-        INSERT INTO properties (
+        insert into properties (
             address_line_1, address_line_2, city, state, zip, original_listing_price,
             sold_price, type, sqft, bedrooms, bathrooms, year_built, on_market, 
             off_market, agent_id, sold, created_at
-        ) VALUES (
+        ) values (
             :address_line_1, :address_line_2, :city, :state, :zip, 
             :original_listing_price, :sold_price, :type, :sqft, :bedrooms, 
             :bathrooms, :year_built, :on_market, :off_market, :agent_id, :sold, NOW()
         )
     """)
 
+    # execute database insert
     try:
         with engine.connect() as connection:
             connection.execute(sql_statement, data)
             connection.commit()
-            # SQLAlchemy doesn't provide a direct way to fetch the last inserted ID with a composite primary key
-            # Thus, if you need to fetch any specific value after insertion, consider executing another query here if needed
             return True
     except ProgrammingError as e:
         print(f"Insert failed: {e}")

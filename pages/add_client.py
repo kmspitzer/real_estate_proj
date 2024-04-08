@@ -13,6 +13,7 @@ from config.re_config import state_list
 #########################
 
 # get agent names for association
+df = db_get_table('agents')
 agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
 
 # display the appropriate sidebar nav
