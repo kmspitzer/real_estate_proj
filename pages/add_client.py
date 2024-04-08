@@ -1,6 +1,6 @@
 import streamlit as st
 from menu import client_menu
-from pages.get_agents import get_agents
+from pages.get_players import get_players
 from pages.standardize_phone import standardize_phone_number
 from utilities.db_utils import *
 
@@ -13,7 +13,7 @@ from config.re_config import state_list
 #########################
 
 # get agent names for association
-agent_names, agent_mapping = get_agents()
+agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
 
 # display the appropriate sidebar nav
 client_menu()
@@ -107,6 +107,7 @@ with st.form("client_form"):
             phone = standardize_phone_number(phone)
         except:
             st.error('Enter valid Phone.')
+            validation_successful = False
 
         if not status:
             st.error('Status is required.')
@@ -121,14 +122,26 @@ with st.form("client_form"):
             # get the agent_id from our mapping
             agent_id = agent_mapping.get(agent_name)
 
-            # collect the data into a tuple
-            data = (first_name, last_name, budget_value, preferred_move_date, address_line_1, address_line_2, city, state, zip,
-                     phone, status, agent_id, sold
-            )
+            # collect the data into a dictionary
+            data = {
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "budget": budget_value,
+                    "preferred_move_date": preferred_move_date,
+                    "address_line_1": address_line_1,
+                    "address_line_2": address_line_2,
+                    "city": city,
+                    "state": state,
+                    "zip": zip,
+                    "phone": phone,
+                    "status": status,
+                    "agent_id": agent_id,
+                    "sold": sold
+            }
 
             # call the function to insert the record into the database
-            client_id = insert_client(data)
-            if client_id:
-                st.success(f"Client added with ID: {client_id}")
+            success = insert_client(data)
+            if success:
+                st.success(f"Client added.")
             else:
                 st.error("An error occurred while adding the client.")
