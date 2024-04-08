@@ -5,20 +5,19 @@ from datetime import date
 import os
 from dotenv import load_dotenv
 
-
-dotenv_path = os.path.join('.', 'credentials.env')
-load_dotenv(dotenv_path)
-
 # database connection function
 def db_connect():
 
-    user=os.getenv('DBUSER'), 
-    password=os.getenv('DBPASSWORD'), 
-    host=os.getenv('HOST'), 
+    dotenv_path = os.path.join('.', 'credentials.env')
+    load_dotenv(dotenv_path)
+
+    user=os.getenv('DBUSER')
+    password=os.getenv('DBPASSWORD') 
+    host=os.getenv('HOST')
     database=os.getenv('DBNAME')
 
     # SQLAlchemy connection string
-    connection_str = 'mysql+mysqlconnector://{user}:{password}@{host}/{database}'.format(user, password, host, database)
+    connection_str = "mysql+mysqlconnector://{{user}}:{{password}}@{{host}}/{{database}}".format(user, password, host, database)
     # Create and return the engine
     engine = create_engine(connection_str)
     return engine
