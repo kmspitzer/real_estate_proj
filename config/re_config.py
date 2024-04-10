@@ -19,3 +19,23 @@ state_list = ['', 'AK', 'AL', 'AR', 'AZ',
                 'UT',
                 'VA', 'VT',
                 'WA', 'WI', 'WV', 'WY']
+
+status_list = ['',
+               'Prospective',
+               'In Progress',
+               'Closed']
+
+type_list = ['',
+             'Single Family Home',
+             'Commercial',
+             'Land',
+             'Multi Family Home',
+             'Apartment',
+             'Townhouse',
+             'Condo']
+
+outcome_list = ['',
+                'Uninterested',
+                'Interested',
+                'Make Offer',
+                'Buy']
