@@ -35,7 +35,7 @@ def property_menu():
 
 def agent_menu():
     if 'role' not in st.session_state:
-        st.session_state = 'Agent Manager'
+        st.session_state.role = 'Agent Manager'
     # show a navigation menu for users with access to agent functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")

@@ -148,3 +148,128 @@ def insert_property(data):
     except ProgrammingError as e:
         print(f"Insert failed: {e}")
         return False
+    
+
+# function to update an existing property record in the database
+def update_property(data):
+    engine = db_connect()
+    
+    # format insert statement
+    sql_statement = text("""
+        update properties
+        set address_line_1 = :address_line_1,
+                         address_line_2 = :address_line_2,
+                         city = :city,
+                         state = :state,
+                         zip = :zip,
+                         original_listing_price = :original_listing_price,
+                         sold_price = :sold_price,
+                         type = :type,
+                         sqft = :sqft,
+                         bedrooms = :bedrooms,
+                         bathrooms = :bathrooms,
+                         year_built = :year_built,
+                         on_market = :on_market,
+                         off_market = :off_market,
+                         sold = :sold
+        where property_id = :property_id
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Update failed: {e}")
+        return False
+    
+
+# function to insert a new client record into the database
+def update_client(data):
+    engine = db_connect()
+
+    # format insert statement
+    sql_statement = text("""
+        update clients 
+        set first_name = :first_name,
+                         last_name = :last_name,
+                         budget = :budget,
+                         preferred_move_date = :preferred_move_date,
+                         address_line_1 = :address_line_1,
+                         address_line_2 = :address_line_2,
+                         city = :city,
+                         state = :state,
+                         zip = :zip,
+                         phone = :phone,
+                         status = :status,
+                         agent_id = :agent_id,
+                         sold = :sold
+        where client_id = :client_id
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Update failed: {e}")
+        return False
+    
+# function to insert a new agent record into the database
+def update_appointment(data):
+    engine = db_connect()
+
+    # format insert statement
+    sql_statement = text("""
+        update appointments 
+        set agent_id = :agent_id,
+                        client_id = :client_id,
+                        property_id = :property_id,
+                        tour_datetime = :tour_datetime,
+                        outcome = :outcome
+        where agent_id = :agent_id AND client_id = :client_id AND property_id = :property_id AND tour_datetime = :tour_datetime
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Update failed: {e}")
+        return False
+
+# function to insert a new agent record into the database
+def update_agent(data):
+    engine = db_connect()
+
+    # format insert statement
+    sql_statement = text("""
+        update agents 
+        set first_name = :first_name,
+                         last_name = :last_name,
+                         address_line_1 = :address_line_1,
+                         address_line_2 = :address_line_2,
+                         city = :city,
+                         state = :state,
+                         zip = :zip,
+                         phone = :phone,
+                         start_date = :start_date
+        where agent_id = :agent_id
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            # execute the query with named parameters provided in 'data'
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Update failed: {e}")
+        return False

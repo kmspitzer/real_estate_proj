@@ -3,10 +3,7 @@ from datetime import datetime
 from menu import appointment_menu
 from pages.get_players import get_players
 from pages.get_properties import get_properties
-from pages.standardize_phone import standardize_phone_number
 from utilities.db_utils import *
-
-from config.re_config import state_list
 
 
 
