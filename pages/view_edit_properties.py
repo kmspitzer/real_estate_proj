@@ -7,5 +7,4 @@ from utilities.db_utils import *
 property_menu()
 st.title("View/Edit Properties")
 
-
-
+st.write(db_get_table("properties"))
