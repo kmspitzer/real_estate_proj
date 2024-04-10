@@ -1,6 +1,7 @@
 import streamlit as st
 from menu import client_menu
 from pages.get_players import get_players
+from pages.validate_client import validate_client
 from pages.standardize_phone import standardize_phone_number
 from utilities.db_utils import *
 
@@ -62,86 +63,39 @@ with st.form("client_form"):
 
     # when form is submitted, we edit
     if submitted:
-        # initialize a flag to track validation status
-        validation_successful = True
+        # collect the data into a dictionary
+        data = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "budget": budget,
+                "preferred_move_date": preferred_move_date,
+                "address_line_1": address_line_1,
+                "address_line_2": address_line_2,
+                "city": city,
+                "state": state,
+                "zip": zip,
+                "phone": phone,
+                "status": status,
+                "agent_name": agent_name,
+                "sold": sold
+        }
 
-        # check each field separately
-        if not first_name:
-            st.error('First Name is required.')
-            validation_successful = False
+        # validate form input
+        err_message = validate_client(data)
 
-        if not last_name:
-            st.error('Last Name is required.')
-            validation_successful = False
-
-        # handle budget as a special case because it can be None
-        if budget == "":
-            budget_value = None
+        if err_message:
+            # validation error occurred -- display message
+            st.error(err_message)
         else:
-            try:
-                # remove commas for database
-                budget_value = int(budget.replace(",", "").strip())
-            except ValueError:
-                st.error("Please enter a valid number for Budget.")
-                validation_successful = False
+            # format phone number
+            data['phone'] = standardize_phone_number(data['phone'])
 
-        if not address_line_1:
-            st.error('Address Line 1 is required.')
-            validation_successful = False
+            # get the agent_id from mapping
+            data['agent_id'] = agent_mapping.get(agent_name)
 
-        if not city:
-            st.error('City is required.')
-            validation_successful = False
-
-        if not state:
-            st.error('State is required.')
-            validation_successful = False
-
-        # ensure zip is 5-digit
-        if len(zip) != 5 or not zip.isdigit():
-            st.error('A valid ZIP code is required.')
-            validation_successful = False
-
-        # standardize phone number (nnn) nnn-nnnn
-        # as long as we get 10 digits
-        try:
-            phone = standardize_phone_number(phone)
-        except:
-            st.error('Enter valid Phone.')
-            validation_successful = False
-
-        if not status:
-            st.error('Status is required.')
-            validation_successful = False
-
-        if not agent_name:
-            st.error('Agent Name is required.')
-            validation_successful = False
-
-        # if all fields are valid, proceed to process the form
-        if validation_successful:
-            # get the agent_id from our mapping
-            agent_id = agent_mapping.get(agent_name)
-
-            # collect the data into a dictionary
-            data = {
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "budget": budget_value,
-                    "preferred_move_date": preferred_move_date,
-                    "address_line_1": address_line_1,
-                    "address_line_2": address_line_2,
-                    "city": city,
-                    "state": state,
-                    "zip": zip,
-                    "phone": phone,
-                    "status": status,
-                    "agent_id": agent_id,
-                    "sold": sold
-            }
-
-            # call the function to insert the record into the database
+            # call function to insert the record into the database
             success = insert_client(data)
+            
             if success:
                 st.success(f"Client added.")
             else:

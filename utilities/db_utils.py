@@ -41,6 +41,78 @@ def db_get_table(tbl):
         return None
 
 
+# function to join other tables to appointments
+def db_get_appointment_display():
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  concat(ag.first_name, ' ', ag.last_name) agent_name,
+                        concat(cl.first_name, ' ', cl.last_name) client_name,
+                        concat(pr.address_line_1, ', ', pr.address_line_2, ', ', pr.city, ', ', pr.state, ', ', pr.zip) property_address,
+                        date(ap.tour_datetime) tour_date,
+                        time(ap.tour_datetime) tour_time,
+                        ap.outcome outcome
+                from appointments ap
+                join agents ag on ap.agent_id = ag.agent_id
+                join clients cl on ap.client_id = cl.client_id
+                join properties pr on ap.property_id = pr.property_id
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+
+# function to join agents table to clients
+def db_get_client_display():
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  cl.first_name, cl.last_name,
+                        cl.budget, cl.preferred_move_date,
+                        cl.address_line_1, cl.address_line_2, cl.city, cl.state, cl.zip,
+                        cl.phone, cl.status,
+                        concat(ag.first_name, ' ', ag.last_name) agent_name,
+                        cl.sold
+                from clients cl
+                join agents ag on cl.agent_id = ag.agent_id
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+
+# function to join agents table to properties
+def db_get_properties_display():
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  pr.address_line_1, pr.address_line_2, pr.city, pr.state, pr.zip,
+                        concat('$ ', pr.original_listing_price) original_listing_price,
+                        concat('$ ', pr.sold_price) sold_price,
+                        pr.type, pr.sqft, pr.bedrooms, pr.bathrooms, pr.year_built,
+                        pr.on_market, pr.off_market,
+                        concat(ag.first_name, ' ', ag.last_name) agent_name,
+                        pr.sold
+                from properties pr
+                join agents ag on pr.agent_id = ag.agent_id
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+
 # function to insert a new agent record into the database
 def insert_agent(data):
     engine = db_connect()

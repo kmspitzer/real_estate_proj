@@ -3,7 +3,10 @@ from datetime import datetime
 from menu import appointment_menu
 from pages.get_players import get_players
 from pages.get_properties import get_properties
+from pages.validate_appointment import validate_appointment
 from utilities.db_utils import *
+
+from config.re_config import state_list
 
 
 
@@ -44,56 +47,34 @@ with st.form("appointment_form"):
 
     # when form is submitted, we edit
     if submitted:
-        # initialize a flag to track validation status
-        validation_successful = True
+        # collect the data into a dictionary
+        data = {
+                "agent_name": agent_name,
+                "client_name": client_name,
+                "property_address": property_address,
+                "tour_date": tour_date,
+                "tour_time": tour_time,
+                "outcome": outcome
+        }
 
-        # check each field separately
-        if not tour_date:
-            st.error('Tour Date is required.')
-            validation_successful = False
+        # validate form input
+        err_message = validate_appointment(data)
 
-        if not tour_time:
-            st.error('Tour Time is required.')
-            validation_successful = False
-
-        if not agent_name:
-            st.error('Agent Name is required.')
-            validation_successful = False
-
-        if not client_name:
-            st.error('Client Name is required.')
-            validation_successful = False
-
-        if not property_address:
-            st.error('Property is required.')
-            validation_successful = False
-
-        outcome_value = outcome
-        if outcome_value == "":
-            outcome_value = None
-
-        # if all fields are valid, proceed to process the form
-        if validation_successful:
-            # get the agent_id from our mapping
-            agent_id = agent_mapping.get(agent_name)
-            client_id = client_mapping.get(client_name)
-            property_id = property_mapping.get(property_address)
+        if err_message:
+            # validation error occurred -- display message
+            st.error(err_message)
+        else:
+            # get the agent_id, client_id and property_id from mappings
+            data['agent_id'] = agent_mapping.get(agent_name)
+            data['client_id'] = client_mapping.get(client_name)
+            data['property_id'] = property_mapping.get(property_address)
 
             # need to store tour date and time as a timestamp in our database
-            tour_datetime = datetime.combine(tour_date, tour_time)
+            data['tour_datetime'] = datetime.combine(tour_date, tour_time)
 
-            # collect the data into a dictionary
-            data = {
-                    "agent_id": agent_id,
-                    "client_id": client_id,
-                    "property_id": property_id,
-                    "tour_datetime": tour_datetime,
-                    "outcome": outcome_value
-            }
-
-            # call the function to insert the record into the database
+            # call function to insert the record into the database
             success = insert_appointment(data)
-            print(f'db output: {success}')
+
             if success:
                 st.success(f"Appointment added.")
             else:

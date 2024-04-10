@@ -1,5 +1,7 @@
 import streamlit as st
+from datetime import datetime
 from menu import agent_menu
+from pages.validate_agent import validate_agent
 from pages.standardize_phone import standardize_phone_number
 from utilities.db_utils import *
 
@@ -10,6 +12,7 @@ from config.re_config import state_list
 ########################
 ## ADD NEW AGENT FORM ##
 ########################
+
 
 # display the appropriate sidebar nav
 agent_menu()
@@ -34,54 +37,13 @@ with st.form("agent_form"):
 
     start_date = st.date_input("Start Date", 'today')
 
-
-    # form submission button
+    # display submit button
     submitted = st.form_submit_button("Submit Agent")
 
     # when form is submitted, we edit
     if submitted:
-        # initialize a flag to track validation status
-        validation_successful = True
-
-        # check each field separately
-        if not first_name:
-            st.error('First Name is required.')
-            validation_successful = False
-
-        if not last_name:
-            st.error('Last Name is required.')
-            validation_successful = False
-
-        if not address_line_1:
-            st.error('Address Line 1 is required.')
-            validation_successful = False
-
-        if not city:
-            st.error('City is required.')
-            validation_successful = False
-
-        if not state:
-            st.error('State is required.')
-            validation_successful = False
-
-        # ensure zip is 5-digit
-        if len(zip) != 5 or not zip.isdigit():
-            st.error('A valid ZIP code is required.')
-            validation_successful = False
-
-        # standardize phone number (nnn) nnn-nnnn
-        # as long as we get 10 digits
-        try:
-            phone = standardize_phone_number(phone)
-        except:
-            st.error('Enter valid Phone.')
-            validation_successful = False
-
-        # if all fields are valid, proceed to process the form
-        if validation_successful:
-
-            # collect the data into a dictionary
-            data = {
+        # gather input into dictionary
+        data = {
                 "first_name": first_name,
                 "last_name": last_name,
                 "address_line_1": address_line_1,
@@ -91,10 +53,21 @@ with st.form("agent_form"):
                 "zip": zip,
                 "phone": phone,
                 "start_date": start_date
-            }
+        }
 
-            # call the function to insert the record into the database
+        # validate form input
+        err_message = validate_agent(data)
+
+        if err_message:
+            # validation error occurred -- display message
+            st.error(err_message)
+        else:
+            # format phone number
+            data['phone'] = standardize_phone_number(phone)
+
+            # call function to insert the record into the database
             success = insert_agent(data)
+
             if success:
                 st.success(f"Agent added.")
             else:

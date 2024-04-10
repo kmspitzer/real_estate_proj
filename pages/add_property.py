@@ -1,6 +1,7 @@
 import streamlit as st
 from menu import property_menu
 from pages.get_players import get_players
+from pages.validate_property import validate_property
 from utilities.db_utils import *
 
 from config.re_config import state_list
@@ -59,118 +60,45 @@ with st.form("property_form"):
 
     # spld checkbox
     sold = st.checkbox("Sold")
-        
 
     # form submission button
     submitted = st.form_submit_button("Submit Property")
 
     # when form is submitted, we edit
     if submitted:
-        # initialize a flag to track validation status
-        validation_successful = True
+        # collect the data into a dictionary
+        data = {
+                "address_line_1": address_line_1,
+                "address_line_2": address_line_2,
+                "city": city,
+                "state": state,
+                "zip": zip,
+                "original_listing_price": original_listing_price,
+                "sold_price": sold_price,
+                "type": type,
+                "sqft": sqft,
+                "bedrooms": bedrooms,
+                "bathrooms": bathrooms,
+                "year_built": year_built,
+                "on_market": on_market,
+                "off_market": off_market,
+                "agent_name": agent_name,
+                "sold": sold
+        }
 
-        # check each field separately
-        if not address_line_1:
-            st.error('Address Line 1 is required.')
-            validation_successful = False
+        # validate form input
+        err_message = validate_property(data)
 
-        if not city:
-            st.error('City is required.')
-            validation_successful = False
-
-        if not state:
-            st.error('State is required.')
-            validation_successful = False
-
-        # ensure zip is 5-digit
-        if len(zip) != 5 or not zip.isdigit():
-            st.error('A valid ZIP code is required.')
-            validation_successful = False
-
-        # handle original_listing_price as a special case because it can be None
-        if original_listing_price == "":
-            original_listing_price_value = None
+        if err_message:
+            # validation error occurred -- display message
+            st.error(err_message)
         else:
-            try:
-                # remove commas for database
-                original_listing_price_value = int(original_listing_price.replace(",", "").strip())
-            except ValueError:
-                st.error("Please enter a valid number for the Original Listing Price.")
-                validation_successful = False
+            # get the agent_id from mapping
+            data['agent_id'] = agent_mapping.get(agent_name)
 
-        # handle sold price as a special case because it can be None
-        if sold_price == "":
-            sold_price_value = None
-        else:
-            try:
-                # remove commas for database
-                sold_price_value = int(sold_price.replace(",", "").strip())
-            except ValueError:
-                st.error("Please enter a valid number for Sold Price.")
-                validation_successful = False
-
-        if not type:
-            st.error('Property Type is required.')
-            validation_successful = False
-
-        # if populated, characteristics must be numeric
-        sqft_value = sqft
-        if  sqft_value == '':
-            sqft_value = None
-        elif not sqft_value.isdigit():
-            st.error('Square Feet must be numeric.')
-            validation_successful = False
-
-        bedrooms_value = bedrooms
-        if bedrooms_value == '':
-            bedrooms_value = None
-        elif not bedrooms_value.isdigit():
-            st.error('Number of Bedrooms must be numeric.')
-            validation_successful = False
-
-        bathrooms_value = bathrooms
-        if bathrooms_value == '':
-            bathrooms_value = None
-        elif not bathrooms_value.isdigit():
-            st.error('Number of Bathrooms must be numeric.')
-            validation_successful = False
-
-        year_built = year_built
-        if len(year_built) != 4 or not year_built.isdigit():
-            st.error('Year Built must be 4 digits.')
-            validation_successful = False
-
-        if not agent_name:
-            st.error('Agent Name is required.')
-            validation_successful = False
-
-        # if all fields are valid, proceed to process the form
-        if validation_successful:
-            # get the agent_id from our mapping
-            agent_id = agent_mapping.get(agent_name)
-
-            # collect the data into a dictionary
-            data = {
-                    "address_line_1": address_line_1,
-                    "address_line_2": address_line_2,
-                    "city": city,
-                    "state": state,
-                    "zip": zip,
-                    "original_listing_price": original_listing_price_value,
-                    "sold_price": sold_price_value,
-                    "type": type,
-                    "sqft": sqft_value,
-                    "bedrooms": bedrooms_value,
-                    "bathrooms": bathrooms_value,
-                    "year_built": year_built,
-                    "on_market": on_market,
-                    "off_market": off_market,
-                    "agent_id": agent_id,
-                    "sold": sold
-            }
-
-            # call the function to insert the record into the database
+            # call function to insert the record into the database
             success = insert_property(data)
+            
             if success:
                 st.success(f"Property added.")
             else:
