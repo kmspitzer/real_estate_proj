@@ -41,22 +41,50 @@ def db_get_table(tbl):
         return None
 
 
+# function to get agent display columns
+def db_get_agent_display():
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  ag.first_name "First Name",
+                        ag.last_name "Last Name",
+                        ag.address_line_1 "Address Line 1",
+                        ag.address_line_2 "Address Line 2",
+                        ag.city "City",
+                        ag.state "State",
+                        ag.zip "ZIP",
+                        ag.phone "Phone",
+                        ag.start_date "Start Date"
+                from agents ag
+                order by ag.last_name
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+
+
 # function to join other tables to appointments
 def db_get_appointment_display():
     engine = db_connect()
 
     try:
         query = f"""
-                select  concat(ag.first_name, ' ', ag.last_name) agent_name,
-                        concat(cl.first_name, ' ', cl.last_name) client_name,
-                        concat(pr.address_line_1, ', ', pr.address_line_2, ', ', pr.city, ', ', pr.state, ', ', pr.zip) property_address,
-                        date(ap.tour_datetime) tour_date,
-                        time(ap.tour_datetime) tour_time,
-                        ap.outcome outcome
+                select  concat(ag.first_name, ' ', ag.last_name) "Agent Name",
+                        concat(cl.first_name, ' ', cl.last_name) "Client Name",
+                        concat(pr.address_line_1, ', ', pr.address_line_2, ', ', pr.city, ', ', pr.state, ', ', pr.zip) "Property Address",
+                        date(ap.tour_datetime) "Tour Date",
+                        time(ap.tour_datetime) "Tour Time",
+                        ap.outcome "Outcome"
                 from appointments ap
                 join agents ag on ap.agent_id = ag.agent_id
                 join clients cl on ap.client_id = cl.client_id
                 join properties pr on ap.property_id = pr.property_id
+                order by ag.last_name
         """
         # use the engine directly with pandas
         df = pd.read_sql_query(query, engine)
@@ -72,14 +100,25 @@ def db_get_client_display():
 
     try:
         query = f"""
-                select  cl.first_name, cl.last_name,
-                        concat('$ ', cl.budget) budget, cl.preferred_move_date,
-                        cl.address_line_1, cl.address_line_2, cl.city, cl.state, cl.zip,
-                        cl.phone, cl.status,
-                        concat(ag.first_name, ' ', ag.last_name) agent_name,
-                        cl.sold
+                select  cl.first_name "First Name",
+                        cl.last_name "Last Name",
+                        concat('$ ', cl.budget) "Budget",
+                        cl.preferred_move_date "Preferred Move Date",
+                        cl.address_line_1 "Address Line 1",
+                        cl.address_line_2 "Address Line 2",
+                        cl.city "City",
+                        cl.state "State",
+                        cl.zip "ZIP",
+                        cl.phone "Phone",
+                        cl.status "Status",
+                        concat(ag.first_name, ' ', ag.last_name) "Agent Name",
+                        case cl.sold
+                            when true then "Yes"
+                            else "No"
+                        end "Sold"
                 from clients cl
                 join agents ag on cl.agent_id = ag.agent_id
+                order by cl.last_name
         """
         # use the engine directly with pandas
         df = pd.read_sql_query(query, engine)
@@ -95,15 +134,28 @@ def db_get_properties_display():
 
     try:
         query = f"""
-                select  pr.address_line_1, pr.address_line_2, pr.city, pr.state, pr.zip,
-                        concat('$ ', pr.original_listing_price) original_listing_price,
-                        concat('$ ', pr.sold_price) sold_price,
-                        pr.type, pr.sqft, pr.bedrooms, pr.bathrooms, pr.year_built,
-                        pr.on_market, pr.off_market,
-                        concat(ag.first_name, ' ', ag.last_name) agent_name,
-                        pr.sold
+                select  pr.address_line_1 "Address Line 1",
+                        pr.address_line_2 "Address Line 2",
+                        pr.city "City",
+                        pr.state "State",
+                        pr.zip "ZIP",
+                        concat('$ ', pr.original_listing_price) "Original Listing Price",
+                        concat('$ ', pr.sold_price) "Sold Price",
+                        pr.type "Type",
+                        pr.sqft "Square Feet",
+                        pr.bedrooms "Bedrooms",
+                        pr.bathrooms "Bathrooms",
+                        pr.year_built "Year Built",
+                        pr.on_market "On Market",
+                        pr.off_market "Off Market",
+                        concat(ag.first_name, ' ', ag.last_name) "Agent Name",
+                        case pr.sold
+                            when true then "Yes"
+                            else "No"
+                        end "Sold"
                 from properties pr
                 join agents ag on pr.agent_id = ag.agent_id
+                order by ag.last_name
         """
         # use the engine directly with pandas
         df = pd.read_sql_query(query, engine)
