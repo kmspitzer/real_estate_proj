@@ -73,7 +73,7 @@ def db_get_client_display():
     try:
         query = f"""
                 select  cl.first_name, cl.last_name,
-                        cl.budget, cl.preferred_move_date,
+                        concat('$ ', cl.budget) budget, cl.preferred_move_date,
                         cl.address_line_1, cl.address_line_2, cl.city, cl.state, cl.zip,
                         cl.phone, cl.status,
                         concat(ag.first_name, ' ', ag.last_name) agent_name,
