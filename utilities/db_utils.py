@@ -163,7 +163,69 @@ def db_get_properties_display():
     except Exception as err:
         print(f"Error: {err}")
         return None
+    
+# function to join agents table to properties
+def db_get_properties_by_id(property_id, agent_id):
+    engine = db_connect()
 
+    try:
+        query = f"""
+                select  pr.address_line_1 "Address Line 1",
+                        pr.address_line_2 "Address Line 2",
+                        pr.city "City",
+                        pr.state "State",
+                        pr.zip "ZIP",
+                        pr.original_listing_price "Original Listing Price",
+                        pr.sold_price "Sold Price",
+                        pr.type "Type",
+                        pr.sqft "Square Feet",
+                        pr.bedrooms "Bedrooms",
+                        pr.bathrooms "Bathrooms",
+                        pr.year_built "Year Built",
+                        pr.on_market "On Market",
+                        pr.off_market "Off Market",
+                        concat(ag.first_name, ' ', ag.last_name) "Agent Name",
+                        case pr.sold
+                            when true then "Yes"
+                            else "No"
+                        end "Sold"
+                from properties pr
+                join agents ag on pr.agent_id = ag.agent_id
+                where pr.property_id = {property_id} AND ag.agent_id = {agent_id}
+                order by ag.last_name
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+# function to get agent display columns
+def db_get_agent_by_id(agent_id):
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  ag.first_name "First Name",
+                        ag.last_name "Last Name",
+                        ag.address_line_1 "Address Line 1",
+                        ag.address_line_2 "Address Line 2",
+                        ag.city "City",
+                        ag.state "State",
+                        ag.zip "ZIP",
+                        ag.phone "Phone",
+                        ag.start_date "Start Date"
+                from agents ag
+                where ag.agent_id = {agent_id}
+                order by ag.last_name
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
 
 # function to insert a new agent record into the database
 def insert_agent(data):
