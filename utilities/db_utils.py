@@ -226,6 +226,39 @@ def db_get_agent_by_id(agent_id):
     except Exception as err:
         print(f"Error: {err}")
         return None
+    
+# function to join agents table to clients
+def db_get_client_by_id(client_id):
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  cl.first_name "First Name",
+                        cl.last_name "Last Name",
+                        cl.budget "Budget",
+                        cl.preferred_move_date "Preferred Move Date",
+                        cl.address_line_1 "Address Line 1",
+                        cl.address_line_2 "Address Line 2",
+                        cl.city "City",
+                        cl.state "State",
+                        cl.zip "ZIP",
+                        cl.phone "Phone",
+                        cl.status "Status",
+                        case cl.sold
+                            when true then "Yes"
+                            else "No"
+                        end "Sold",
+                        cl.agent_id "Agent ID"
+                from clients cl
+                where cl.client_id = {client_id}
+                order by cl.last_name
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
 
 # function to insert a new agent record into the database
 def insert_agent(data):
