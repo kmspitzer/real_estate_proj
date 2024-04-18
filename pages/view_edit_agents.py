@@ -14,22 +14,23 @@ with st.form("agent_form"):
     st.write("## Update Existing Agent")
 
     agent_id = st.text_input("Agent ID", max_chars=50).strip()
+    agent = db_get_agent_by_id(agent_id)
 
     # name
-    first_name = st.text_input("First Name", max_chars=50).strip()
-    last_name = st.text_input("Last Name", max_chars=50).strip()
+    first_name = st.text_input("First Name", value=str(agent['First Name'].values[0]), max_chars=50).strip()
+    last_name = st.text_input("Last Name", value=str(agent['Last Name'].values[0]), max_chars=50).strip()
 
     # address with state dropdown
-    address_line_1 = st.text_input("Address Line 1", max_chars=90).strip()
-    address_line_2 = st.text_input("Address Line 2", max_chars=50).strip()
-    city = st.text_input("City", max_chars=30).strip()
-    state = st.selectbox("State", state_list)
-    zip = st.text_input("ZIP", max_chars=5).strip()
+    address_line_1 = st.text_input("Address Line 1", value=str(agent['Address Line 1'].values[0]), max_chars=90).strip()
+    address_line_2 = st.text_input("Address Line 2", value=str(agent['Address Line 2'].values[0]), max_chars=50).strip()
+    city = st.text_input("City", value=str(agent['City'].values[0]), max_chars=30).strip()
+    state = st.text_input("State", value=str(agent['State'].values[0])).strip()
+    zip = st.text_input("ZIP", value=str(agent['ZIP'].values[0]), max_chars=5).strip()
 
     # phone number
-    phone = st.text_input("Phone", max_chars=15).strip()
+    phone = st.text_input("Phone", value=str(agent['Phone'].values[0]), max_chars=15).strip()
 
-    start_date = st.date_input("Start Date", 'today')
+    start_date = st.text_input("Start Date", value=str(agent['Start Date'].values[0])).strip()
 
 
     # form submission button
