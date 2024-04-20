@@ -260,6 +260,29 @@ def db_get_client_by_id(client_id):
         print(f"Error: {err}")
         return None
 
+# function to join other tables to appointments
+def db_get_appointment_by_id(agent_id, client_id, property_id, tour_datetime):
+    engine = db_connect()
+
+    try:
+        query = f"""
+                select  ap.agent_id "Agent ID",
+                        ap.client_id "Client ID",
+                        ap.property_id "Property ID",
+                        ap.tour_datetime "Tour Datetime",
+                        ap.outcome "Outcome"
+                from appointments ap
+                where ap.agent_id = {agent_id} and ap.client_id = {client_id} and ap.property_id = {property_id} and ap.tour_datetime = '{tour_datetime}'
+
+        """
+        # use the engine directly with pandas
+        df = pd.read_sql_query(query, engine)
+        return df
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+
+
 # function to insert a new agent record into the database
 def insert_agent(data):
     engine = db_connect()
