@@ -18,21 +18,15 @@ st.write(db_get_table("appointments"))
 with st.form("appointment_form"):
     st.write("## Update Existing Appointment")
 
-    # choose agent
-    agent_name = st.selectbox("Agent Name", options=[''] + agent_names)
-
-    # choose client
-    client_name = st.selectbox("Client Name", options=[''] + client_names)
-
-    # choose property
-    property_address = st.selectbox("Property", options=[''] + property_addresses)
-
     # tour date/time
-    tour_date = st.date_input("Tour Date", value='today')
-    tour_time = st.time_input("Tour Time", value='now')
+    tour_datetime = st.text_input("Tour Datetime", max_chars=19).strip()
+    agent_id = st.text_input("Agent ID", max_chars=10).strip()
+    property_id = st.text_input("Property ID", max_chars=10).strip()
+    client_id = st.text_input("Client ID", max_chars=10).strip()
+    appointments = db_get_appointment_by_id(agent_id, client_id, property_id, tour_datetime)
 
-    # outcome dropdown
-    outcome = st.selectbox("Outcome", ['', 'Uninterested', 'Interested', 'Make Offer', 'Buy'])
+    # outcome
+    outcome = st.text_input("Outcome (Possible values: Uninterested, Interested, Make Offer, Buy)", value=str(appointments['Outcome'].values[0]))
 
     # form submission button
     submitted = st.form_submit_button("Submit Appointment")
@@ -43,39 +37,19 @@ with st.form("appointment_form"):
         validation_successful = True
 
         # check each field separately
-        if not tour_date:
-            st.error('Tour Date is required.')
-            validation_successful = False
-
-        if not tour_time:
-            st.error('Tour Time is required.')
-            validation_successful = False
-
-        if not agent_name:
-            st.error('Agent Name is required.')
-            validation_successful = False
-
-        if not client_name:
-            st.error('Client Name is required.')
-            validation_successful = False
-
-        if not property_address:
-            st.error('Property is required.')
+        if not tour_datetime:
+            st.error('Tour Datetime is required.')
             validation_successful = False
 
         outcome_value = outcome
         if outcome_value == "":
             outcome_value = None
+        if outcome_value not in ['Uninterested', 'Interested', 'Make Offer', 'Buy']:
+            st.error('Not a valid outcome')
+            validation_successful = False
 
         # if all fields are valid, proceed to process the form
         if validation_successful:
-            # get the agent_id from our mapping
-            agent_id = agent_mapping.get(agent_name)
-            client_id = client_mapping.get(client_name)
-            property_id = property_mapping.get(property_address)
-
-            # need to store tour date and time as a timestamp in our database
-            tour_datetime = datetime.combine(tour_date, tour_time)
 
             # collect the data into a dictionary
             data = {
