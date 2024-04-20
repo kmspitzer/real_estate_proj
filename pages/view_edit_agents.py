@@ -61,6 +61,9 @@ with st.form("agent_form"):
         if not state:
             st.error('State is required.')
             validation_successful = False
+        if state not in state_list:
+            st.error('State is not valid')
+            validation_successful = False
 
         # ensure zip is 5-digit
         if len(zip) != 5 or not zip.isdigit():
