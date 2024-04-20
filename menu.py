@@ -86,16 +86,16 @@ def appointment_menu():
         st.sidebar.page_link("pages/view_edit_appointments.py", label="-->> View/Edit Appointments")
 
 
-def unauthenticated_menu():
-    # Show a navigation menu for unauthenticated users
-    st.sidebar.page_link("app.py", label="Log in")
+# def unauthenticated_menu():
+#     # Show a navigation menu for unauthenticated users
+#     st.sidebar.page_link("app.py", label="Log in")
 
 
 def menu():
     # Determine if a user is logged in or not, then show the correct
     # navigation menu
     if "role" not in st.session_state or st.session_state.role is None:
-        unauthenticated_menu()
+        st.write('Not a valid user')
         return
     authenticated_menu()
 
