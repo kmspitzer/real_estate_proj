@@ -428,7 +428,7 @@ def update_property(data):
         return False
     
 
-# function to insert a new client record into the database
+# function to update an existing client record into the database
 def update_client(data):
     engine = db_connect()
 
@@ -461,7 +461,7 @@ def update_client(data):
         print(f"Update failed: {e}")
         return False
     
-# function to insert a new agent record into the database
+# function to update an existing agent record into the database
 def update_appointment(data):
     engine = db_connect()
 
@@ -486,7 +486,7 @@ def update_appointment(data):
         print(f"Update failed: {e}")
         return False
 
-# function to insert a new agent record into the database
+# function to update an existing agent record into the database
 def update_agent(data):
     engine = db_connect()
 
@@ -514,4 +514,83 @@ def update_agent(data):
             return True
     except ProgrammingError as e:
         print(f"Update failed: {e}")
+        return False
+    
+# function to delete an existing agent record from the database
+def delete_agent(data):
+    engine = db_connect()
+
+    try:
+        sql_statement = text("""
+                delete from agents
+                where agent_id = :agent_id
+                             """)
+        
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except Exception as err:
+        print(f"Error: {err}")
+        return None
+    
+    
+# function to delete an existing appointment record from the database
+def delete_appointment(data):
+    engine = db_connect()
+
+    # format insert statement
+    sql_statement = text("""
+        delete from appointments 
+        where agent_id = :agent_id AND client_id = :client_id AND property_id = :property_id AND tour_datetime = :tour_datetime
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Delete failed: {e}")
+        return False
+    
+# function to delete an existing client record from the database
+def delete_client(data):
+    engine = db_connect()
+
+    # format insert statement
+    sql_statement = text("""
+        delete from clients
+        where client_id = :client_id
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Delete failed: {e}")
+        return False
+    
+# function to delete an existing property record from the database
+def delete_property(data):
+    engine = db_connect()
+    
+    # format insert statement
+    sql_statement = text("""
+        delete from properties
+        where property_id = :property_id
+    """)
+
+    # execute database insert
+    try:
+        with engine.connect() as connection:
+            connection.execute(sql_statement, data)
+            connection.commit()
+            return True
+    except ProgrammingError as e:
+        print(f"Delete failed: {e}")
         return False

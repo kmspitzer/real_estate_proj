@@ -43,6 +43,7 @@ def agent_menu():
         st.sidebar.page_link("pages/agent_options.py", label='Manage Agents')
         st.sidebar.page_link("pages/add_agent.py", label="-->> Add Agent")
         st.sidebar.page_link("pages/view_edit_agents.py", label="-->> View/Edit Agents")
+        st.sidebar.page_link("pages/delete_agents.py", label="-->> Delete Agents")
     elif st.session_state.role == "Client":
         st.sidebar.page_link("pages/show_properties.py", label="Property Listings")
     else: # role is Agent
