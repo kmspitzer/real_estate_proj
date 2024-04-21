@@ -30,6 +30,7 @@ def property_menu():
         st.sidebar.page_link("pages/property_options.py", label="Manage Properties")
         st.sidebar.page_link("pages/add_property.py", label="-->> Add Property")
         st.sidebar.page_link("pages/view_edit_properties.py", label="-->> View/Edit Propeties")
+        st.sidebar.page_link("pages/delete_properties.py", label="-->> Delete Properties")
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
@@ -66,6 +67,7 @@ def client_menu():
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/add_client.py", label="-->> Add Client")
         st.sidebar.page_link("pages/view_edit_clients.py", label="-->> View/Edit Clients")
+        st.sidebar.page_link("pages/delete_clients.py", label="-->> Delete Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
     
 
@@ -85,6 +87,7 @@ def appointment_menu():
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
         st.sidebar.page_link("pages/add_appointment.py", label="-->> Add Appointment")
         st.sidebar.page_link("pages/view_edit_appointments.py", label="-->> View/Edit Appointments")
+        st.sidebar.page_link("pages/delete_appointments.py", label="-->> Delete Appointments")
 
 
 # def unauthenticated_menu():
