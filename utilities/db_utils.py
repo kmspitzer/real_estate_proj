@@ -287,7 +287,6 @@ def db_get_appointment_by_id(agent_id, client_id, property_id, tour_datetime):
 def insert_agent(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         insert into agents (
             first_name, last_name, address_line_1, address_line_2, city, state, zip, 
@@ -311,11 +310,10 @@ def insert_agent(data):
         return False
 
 
-# function to insert a new agent record into the database
+# function to insert a new appointment record into the database
 def insert_appointment(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         insert into appointments (
             agent_id, client_id, property_id, tour_datetime, outcome, created_at
@@ -340,7 +338,6 @@ def insert_appointment(data):
 def insert_client(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         insert into clients (
             first_name, last_name, budget, preferred_move_date,
@@ -368,7 +365,6 @@ def insert_client(data):
 def insert_property(data):
     engine = db_connect()
     
-    # format insert statement
     sql_statement = text("""
         insert into properties (
             address_line_1, address_line_2, city, state, zip, original_listing_price,
@@ -396,7 +392,6 @@ def insert_property(data):
 def update_property(data):
     engine = db_connect()
     
-    # format insert statement
     sql_statement = text("""
         update properties
         set address_line_1 = :address_line_1,
@@ -432,7 +427,6 @@ def update_property(data):
 def update_client(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         update clients 
         set first_name = :first_name,
@@ -461,11 +455,10 @@ def update_client(data):
         print(f"Update failed: {e}")
         return False
     
-# function to update an existing agent record into the database
+# function to update an existing appointment record into the database
 def update_appointment(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         update appointments 
         set agent_id = :agent_id,
@@ -490,7 +483,6 @@ def update_appointment(data):
 def update_agent(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         update agents 
         set first_name = :first_name,
@@ -539,7 +531,6 @@ def delete_agent(data):
 def delete_appointment(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         delete from appointments 
         where agent_id = :agent_id AND client_id = :client_id AND property_id = :property_id AND tour_datetime = :tour_datetime
@@ -559,7 +550,6 @@ def delete_appointment(data):
 def delete_client(data):
     engine = db_connect()
 
-    # format insert statement
     sql_statement = text("""
         delete from clients
         where client_id = :client_id
@@ -579,7 +569,6 @@ def delete_client(data):
 def delete_property(data):
     engine = db_connect()
     
-    # format insert statement
     sql_statement = text("""
         delete from properties
         where property_id = :property_id
