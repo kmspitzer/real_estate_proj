@@ -28,11 +28,7 @@
 - [ Getting Started](#-getting-started)
   - [ Installation](#-installation)
   - [ Usage](#-usage)
-  - [ Tests](#-tests)
-- [ Project Roadmap](#-project-roadmap)
-- [ Contributing](#-contributing)
-- [ License](#-license)
-- [ Acknowledgments](#-acknowledgments)
+
 </details>
 <hr>
 
@@ -48,14 +44,11 @@ The real_estate_proj software project enables streamlined real estate management
 |----|-------------------|---------------------------------------------------------------|
 | ⚙️  | **Architecture**  | The project follows a structured architecture design enabling real estate management UI through a Streamlit app. It utilizes SQLAlchemy for database connectivity with MySQL. The codebase is organized into distinct modules for easy navigation and maintenance. |
 | 🔩 | **Code Quality**  | The codebase exhibits good quality and style with consistent coding practices. It demonstrates adherence to PEP 8 standards and follows a modular approach for better readability and maintainability. Comments and docstrings are used effectively to enhance code clarity. |
-| 📄 | **Documentation** | The project includes well-documented code providing insights into functionality and usage. Detailed explanations are present for functions, files, and database interactions. However, there is room for improvement in expanding documentation coverage and examples. |
+| 📄 | **Documentation** | The project includes well-documented code providing insights into functionality and usage. Detailed explanations are present for functions, files, and database interactions. |
 | 🔌 | **Integrations**  | Key integrations include Streamlit for UI development and interaction, SQLAlchemy for database connectivity to MySQL, and python-dotenv for environment variable management. These integrations enhance the project's functionality and usability within the real estate domain. |
-| 🧩 | **Modularity**    | The codebase demonstrates good modularity with clear separation of concerns. Modules such as menu, pages, and utilities handle specific functionalities, promoting code reusability and maintainability. However, further modularization could enhance scalability and flexibility. |
-| 🧪 | **Testing**       | Testing frameworks and tools used in the project are not explicitly mentioned. Including testing frameworks like pytest or unittest and implementing test cases would ensure code reliability and robustness. |
-| ⚡️  | **Performance**   | The project emphasizes user interaction efficiency through a streamlined UI and optimized database interactions. Efficient data retrieval and form validation contribute to a smooth user experience. However, performance testing and optimization could further enhance speed and resource usage. |
-| 🛡️ | **Security**      | Measures for data protection and access control are not explicitly mentioned in the project details. Implementing secure coding practices, input validation, and authorization mechanisms would enhance data security and privacy. |
+| 🧩 | **Modularity**    | The codebase demonstrates good modularity with clear separation of concerns. Modules such as menu, pages, and utilities handle specific functionalities, promoting code reusability and maintainability. |
+| ⚡️  | **Performance**   | The project emphasizes user interaction efficiency through a streamlined UI and optimized database interactions. |
 | 📦 | **Dependencies**  | Key dependencies include Streamlit for UI development, SQLAlchemy for database integration, and mysqlclient for MySQL database connectivity. These dependencies facilitate core functionalities of the real estate management application. |
-| 🚀 | **Scalability**   | The project shows potential for scalability with its modular design and database structure. However, detailed scalability considerations such as load balancing, caching mechanisms, and database optimization would further strengthen the project's ability to handle increased traffic and data volume. |
 
 ---
 
@@ -183,7 +176,7 @@ The real_estate_proj software project enables streamlined real estate management
 
 **System Requirements:**
 
-* **Python**: `version x.y.z`
+* **Python**: `version Python 3.7+`
 
 ###  Installation
 
@@ -221,13 +214,6 @@ The real_estate_proj software project enables streamlined real estate management
 > $ pytest
 > ```
 
----
-
-##  Project Roadmap
-
-- [X] `► INSERT-TASK-1`
-- [ ] `► INSERT-TASK-2`
-- [ ] `► ...`
 
 ---
 
@@ -273,19 +259,3 @@ Contributions are welcome! Here are several ways you can contribute:
    </a>
 </p>
 </details>
-
----
-
-##  License
-
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-##  Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
-
-[**Return**](#-overview)
-
----
