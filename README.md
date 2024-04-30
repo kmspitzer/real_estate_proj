@@ -188,8 +188,8 @@ The real_estate_proj software project enables streamlined real estate management
 
 <h4>From <code>source</code></h4>
 
-> Run real_estate_proj using the command below:
+> Run real_estate_proj in streamlit application using the command below:
 > ```console
-> $ python main.py
+> $ streamlit run app.py
 > ```
 
