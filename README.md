@@ -8,7 +8,6 @@
     <em>Unlock seamless real estate management effortlessly.</em>
 </p>
 <p align="center">
-	<img src="https://img.shields.io/github/license/kmspitzer/real_estate_proj?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
 	<img src="https://img.shields.io/github/last-commit/kmspitzer/real_estate_proj?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/kmspitzer/real_estate_proj?style=default&color=0080ff" alt="repo-top-language">
 	<img src="https://img.shields.io/github/languages/count/kmspitzer/real_estate_proj?style=default&color=0080ff" alt="repo-language-count">
