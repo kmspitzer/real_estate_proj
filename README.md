@@ -100,7 +100,6 @@ The real_estate_proj software project enables streamlined real estate management
 
 ##  Modules
 
-<details closed><summary>.</summary>
 
 | File                                                                                           | Summary                                                                                                                                                                                                                                                                                                                    |
 | ---                                                                                            | ---                                                                                                                                                                                                                                                                                                                        |
@@ -108,25 +107,17 @@ The real_estate_proj software project enables streamlined real estate management
 | [menu.py](https://github.com/kmspitzer/real_estate_proj/blob/master/menu.py)                   | Defines navigation menus based on user roles in a real estate app. Ensures authenticated users access relevant features like managing agents, clients, properties, and appointments. Implements user redirection if not logged in. Encourages seamless user experience while navigating through different functionalities. |
 | [app.py](https://github.com/kmspitzer/real_estate_proj/blob/master/app.py)                     | Defines entry point, sets user role, and renders dynamic menu for a real estate system. Allows users to select roles and navigate menu options. Facilitates smooth interaction within the system.                                                                                                                          |
 
-</details>
-
-<details closed><summary>config</summary>
 
 | File                                                                                          | Summary                                                                                                                                        |
 | ---                                                                                           | ---                                                                                                                                            |
 | [re_config.py](https://github.com/kmspitzer/real_estate_proj/blob/master/config/re_config.py) | States, statuses, property types, and outcomes. Supports data consistency and selection options across the real estate projects UI components. |
 
-</details>
 
-<details closed><summary>utilities</summary>
 
 | File                                                                                           | Summary                                                                                                                                                                                                                                                                                                                                 |
 | ---                                                                                            | ---                                                                                                                                                                                                                                                                                                                                     |
 | [db_utils.py](https://github.com/kmspitzer/real_estate_proj/blob/master/utilities/db_utils.py) | This `db_utils.py` file in the `real_estate_proj` repository serves as a key utility component for managing interactions with the projects database. It encapsulates functions and methods related to handling database operations efficiently across various parts of the application, ensuring smooth and reliable data transactions. |
 
-</details>
-
-<details closed><summary>pages</summary>
 
 | File                                                                                                                   | Summary                                                                                                                                                                                                                                                                                                  |
 | ---                                                                                                                    | ---                                                                                                                                                                                                                                                                                                      |
@@ -159,15 +150,11 @@ The real_estate_proj software project enables streamlined real estate management
 | [property_options.py](https://github.com/kmspitzer/real_estate_proj/blob/master/pages/property_options.py)             | Manages property operations through a menu interface in the real_estate_proj repository. Presents property information and functionalities via Streamlit.                                                                                                                                                |
 | [delete_appointments.py](https://github.com/kmspitzer/real_estate_proj/blob/master/pages/delete_appointments.py)       | Manages deletion of appointments from a database. Presents appointment details for deletion and handles user input. Displays success or error messages. Integrated within the real_estate_proj repos modular architecture for streamlined real estate management.                                        |
 
-</details>
-
-<details closed><summary>sql</summary>
 
 | File                                                                                                       | Summary                                                                                                                                                                                                                                                           |
 | ---                                                                                                        | ---                                                                                                                                                                                                                                                               |
 | [real_estate_proj.sql](https://github.com/kmspitzer/real_estate_proj/blob/master/sql/real_estate_proj.sql) | Defines MySQL tables for agents, properties, clients, and appointments with attributes and relationships in the real_estate_proj database. Supports structured data storage and efficient querying for real estate management functionalities in the application. |
 
-</details>
 
 ---
 
