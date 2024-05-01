@@ -38,4 +38,4 @@ with st.form("delet_client_form"):
             if success:
                 st.success(f"Client deleted.")
             else:
-                st.error("Record ID does not exist.")
+                st.error("Client ID does not exist.")

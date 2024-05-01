@@ -59,18 +59,22 @@ def agent_form(action, data):
         # when form is submitted, we edit
         if db_submitted:
             # gather input into dictionary
-            data = {
-                    "agent_id": data['agent_id'],
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "address_line_1": address_line_1,
-                    "address_line_2": address_line_2,
-                    "city": city,
-                    "state": state,
-                    "zip": zip,
-                    "phone": phone,
-                    "start_date": start_date
-            }
+            if action == "Update":
+                # get key from previous data
+                data = {
+                    "agent_id": data["agent_id"]
+                }
+
+            # items from data input
+            data["first_name"] = first_name
+            data["last_name"] = last_name
+            data["address_line_1"] = address_line_1
+            data["address_line_2"] = address_line_2
+            data["city"] = city
+            data["state"] = state
+            data["zip"] = zip
+            data["phone"] = phone
+            data["start_date"] = start_date
 
             # validate form input
             err_message = validate_agent(data)

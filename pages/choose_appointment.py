@@ -40,8 +40,7 @@ def choose_appointment():
             if not record_id.isdigit():
                 st.error("Appt ID must be numeric.")
                 validated = False
-
-            if int(record_id) > len(appt):
+            elif int(record_id) > len(appt):
                 st.error("Appt ID does not exist.")
                 validated = False
 

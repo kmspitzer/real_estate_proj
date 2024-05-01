@@ -76,14 +76,22 @@ def appointment_form(action, data):
         # when form is submitted, we edit
         if submitted:
             # collect the data into a dictionary
-            data = {
-                    "agent_name": agent_name,
-                    "client_name": client_name,
-                    "property_address": property_address,
-                    "tour_date": tour_date,
-                    "tour_time": tour_time,
-                    "outcome": outcome
-            }
+            if action == "Update":
+                # format keys from original data
+                data = {
+                    "key_agent_id": agent_mapping.get(data["agent_name"]),
+                    "key_client_id":client_mapping.get(data["client_name"]),
+                    "key_property_id": property_mapping.get(data["property_address"]),
+                    "key_tour_datetime": datetime.combine(data["tour_date"], datetime.strptime(data["tour_time"], '%H:%M').time())
+                }
+
+            # items from data input
+            data["agent_name"] =  agent_name
+            data["client_name"] = client_name
+            data["property_address"] = property_address
+            data["tour_date"] = tour_date
+            data["tour_time"] = tour_time
+            data["outcome"] = outcome
 
             # validate form input
             err_message = validate_appointment(data)

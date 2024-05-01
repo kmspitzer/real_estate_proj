@@ -76,22 +76,26 @@ def client_form(action, data):
         # when form is submitted, we edit
         if submitted:
             # collect the data into a dictionary
-            data = {
-                    "client_id": data["client_id"],
-                    "first_name": first_name,
-                    "last_name": last_name,
-                    "budget": budget,
-                    "preferred_move_date": preferred_move_date,
-                    "address_line_1": address_line_1,
-                    "address_line_2": address_line_2,
-                    "city": city,
-                    "state": state,
-                    "zip": zip,
-                    "phone": phone,
-                    "status": status,
-                    "agent_name": agent_name,
-                    "sold": sold
-            }
+            if action == "Update":
+                # format key from original data
+                data = {
+                    "client_id": data["client_id"]
+                }
+
+            # format data items from input
+            data["first_name"] = first_name
+            data["last_name"] = last_name
+            data["budget"] = budget
+            data["preferred_move_date"] = preferred_move_date
+            data["address_line_1"] = address_line_1
+            data["address_line_2"] = address_line_2
+            data["city"] = city
+            data["state"] = state
+            data["zip"] = zip
+            data["phone"] = phone
+            data["status"] = status
+            data["agent_name"] = agent_name
+            data["sold"] = sold
 
             # validate form input
             err_message = validate_client(data)

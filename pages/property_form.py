@@ -89,26 +89,29 @@ def property_form(action, data):
 
         # when form is submitted, we edit
         if submitted:
-            # collect the data into a dictionary
-            data = {
-                    "property_id": data["property_id"],
-                    "address_line_1": address_line_1,
-                    "address_line_2": address_line_2,
-                    "city": city,
-                    "state": state,
-                    "zip": zip,
-                    "original_listing_price": original_listing_price,
-                    "sold_price": sold_price,
-                    "type": type,
-                    "sqft": sqft,
-                    "bedrooms": bedrooms,
-                    "bathrooms": bathrooms,
-                    "year_built": year_built,
-                    "on_market": on_market,
-                    "off_market": off_market,
-                    "agent_name": agent_name,
-                    "sold": sold
-            }
+            if action == "Update":
+                # format keys from original data
+                data = {
+                    "property_id": data["property_id"]
+                }
+
+            # items from data input
+            data["address_line_1"] = address_line_1
+            data["address_line_2"] = address_line_2
+            data["city"] = city
+            data["state"] = state
+            data["zip"] = zip
+            data["original_listing_price"] = original_listing_price
+            data["sold_price"] = sold_price
+            data["type"] = type
+            data["sqft"] = sqft
+            data["bedrooms"] = bedrooms
+            data["bathrooms"] = bathrooms
+            data["year_built"] = year_built
+            data["on_market"] = on_market
+            data["off_market"] = off_market
+            data["agent_name"] = agent_name
+            data["sold"] = sold
 
             # validate form input
             err_message = validate_property(data)

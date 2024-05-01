@@ -487,7 +487,7 @@ def update_appointment(data):
                         property_id = :property_id,
                         tour_datetime = :tour_datetime,
                         outcome = :outcome
-        where agent_id = :agent_id AND client_id = :client_id AND property_id = :property_id AND tour_datetime = :tour_datetime
+        where agent_id = :key_agent_id AND client_id = :key_client_id AND property_id = :key_property_id AND tour_datetime = :key_tour_datetime
     """)
 
     # execute database insert

@@ -44,4 +44,4 @@ with st.form("delete_prop_form"):
             if success:
                 st.success(f"Property deleted.")
             else:
-                st.error("Record ID does not exist.")
+                st.error("Property ID does not exist.")

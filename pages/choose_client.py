@@ -55,4 +55,4 @@ def choose_client():
                     return data
                 else:
                     # record id entered was not found
-                    st.error("Please enter a valid Record ID.")
+                    st.error("Please enter a valid Client ID.")

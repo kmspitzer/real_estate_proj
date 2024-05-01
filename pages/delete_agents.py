@@ -40,4 +40,4 @@ with st.form("delete_agent_form"):
             if success:
                 st.success(f"Agent deleted.")
             else:
-                st.error("Record ID does not exist.")
+                st.error("Agent ID does not exist.")
