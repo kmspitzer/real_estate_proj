@@ -16,7 +16,7 @@ def choose_property():
         st.write("## View/Edit Properties")
 
         # accept record id input
-        record_id = st.text_input("Record ID", max_chars=50).strip()
+        record_id = st.text_input("Property ID", max_chars=50).strip()
 
         # display submit button and wait on click
         view_submitted = st.form_submit_button("View Property Details")
@@ -26,7 +26,7 @@ def choose_property():
             validated = True
 
             if not record_id.isdigit():
-                st.error("Record ID must be numeric.")
+                st.error("Property ID must be numeric.")
                 validated = False
 
             if validated:

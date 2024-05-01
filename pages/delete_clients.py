@@ -13,7 +13,7 @@ if st.button('Refresh Clients'):
 # get agents for display on screen
 st.write(db_get_client_display().to_html(index=False), unsafe_allow_html=True)
 
-with st.form("agent_form"):
+with st.form("delet_client_form"):
     st.write("## Delete Client")
 
     # accept record id input

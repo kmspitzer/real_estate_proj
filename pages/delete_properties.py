@@ -16,7 +16,7 @@ prop_df = prop_df.fillna('')
 # get agents for display on screen
 st.write(prop_df.to_html(index=False), unsafe_allow_html=True)
 
-with st.form("agent_form"):
+with st.form("delete_prop_form"):
     st.write("## Delete Property")
 
     # accept record id input

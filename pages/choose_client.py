@@ -13,7 +13,7 @@ def choose_client():
         st.write("## View/Edit Client")
 
         # accept record id input
-        record_id = st.text_input("Record ID", max_chars=50).strip()
+        record_id = st.text_input("Client ID", max_chars=50).strip()
 
         # display submit button and wait on click
         view_submitted = st.form_submit_button("View Client Details")
@@ -23,7 +23,7 @@ def choose_client():
             validated = True
 
             if not record_id.isdigit():
-                st.error("Record ID must be numeric.")
+                st.error("Client ID must be numeric.")
                 validated = False
 
             if validated:

@@ -47,7 +47,7 @@ def db_get_agent_display():
 
     try:
         query = f"""
-                select  ag.agent_id "Record ID",
+                select  ag.agent_id "Agent ID",
                         ag.first_name "First Name",
                         ag.last_name "Last Name",
                         ag.address_line_1 "Address Line 1",
@@ -105,7 +105,7 @@ def db_get_client_display():
 
     try:
         query = f"""
-                select  cl.client_id "Record ID",
+                select  cl.client_id "Client ID",
                         cl.first_name "First Name",
                         cl.last_name "Last Name",
                         concat('$ ', cl.budget) "Budget",
@@ -140,7 +140,7 @@ def db_get_properties_display():
 
     try:
         query = f"""
-                select  pr.property_id "Record ID",
+                select  pr.property_id "Property ID",
                         pr.address_line_1 "Address Line 1",
                         pr.address_line_2 "Address Line 2",
                         pr.city "City",

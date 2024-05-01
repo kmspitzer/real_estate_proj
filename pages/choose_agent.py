@@ -13,7 +13,7 @@ def choose_agent():
         st.write("## View/Edit Agent")
 
         # accept record id input
-        record_id = st.text_input("Record ID", max_chars=50).strip()
+        record_id = st.text_input("Agent ID", max_chars=50).strip()
 
         # display submit button and wait on click
         view_submitted = st.form_submit_button("View Agent Details")
@@ -23,7 +23,7 @@ def choose_agent():
             validated = True
 
             if not record_id.isdigit():
-                st.error("Record ID must be numeric.")
+                st.error("Agent ID must be numeric.")
                 validated = False
 
             if validated:
