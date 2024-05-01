@@ -5,5 +5,6 @@ from utilities.db_utils import *
 
 # client hub
 client_menu()
-st.title("Clients")
+st.title("Real Estate Management System")
+st.write("## Clients")
 

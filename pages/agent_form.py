@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, date
 from pages.validate_agent import validate_agent
 from pages.standardize_phone import standardize_phone_number
 from utilities.db_utils import *
@@ -18,7 +18,11 @@ def agent_form(action, data):
         start_date_default = datetime.today().date()
     else:
         # Convert string to datetime.date object
-        start_date_default = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        if isinstance(start_date_str, date):
+            start_date_default = start_date_str
+        else:
+            # Only parse if start_date_str is a string
+            start_date_default = datetime.strptime(start_date_str, '%Y-%m-%d').date()
 
     # display form and collect data
     with st.form("agent_form"):
@@ -46,12 +50,13 @@ def agent_form(action, data):
 
 
         # form submission button
-        submitted = st.form_submit_button(f"{action} Agent")
+        db_submitted = st.form_submit_button(f"{action} Agent")
 
         # when form is submitted, we edit
-        if submitted:
+        if db_submitted:
             # gather input into dictionary
             data = {
+                    "agent_id": data['agent_id'],
                     "first_name": first_name,
                     "last_name": last_name,
                     "address_line_1": address_line_1,
@@ -77,7 +82,7 @@ def agent_form(action, data):
                 if action == "Add":
                     success = insert_agent(data)
                 else:
-                    st.write(action)
+                    success = update_agent(data)
 
                 if success:
                     st.success(f"Agent {action.lower()}ed.")

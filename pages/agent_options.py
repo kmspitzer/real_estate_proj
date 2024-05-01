@@ -5,4 +5,5 @@ from utilities.db_utils import *
 
 # agent hub
 agent_menu()
-st.title("Agents")
+st.title("Real Estate Management System")
+st.write("## Agents")

@@ -11,6 +11,7 @@ from utilities.db_utils import *
 
 # display the appropriate sidebar nav
 client_menu()
+st.title("Real Estate Management System")
 
 data = {
         "first_name": "",

@@ -6,6 +6,9 @@ def get_players(tbl, id_col, new_col):
     # pull existing players from database
     players = db_get_table(tbl)
 
+    if players is None:
+        raise ValueError("Failed to retrieve agent/client data")
+
     # create a column with first and last name concatenated
     players[new_col] = players['first_name'] + ' ' + players['last_name']
 

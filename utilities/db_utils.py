@@ -47,7 +47,8 @@ def db_get_agent_display():
 
     try:
         query = f"""
-                select  ag.first_name "First Name",
+                select  ag.agent_id "Record ID",
+                        ag.first_name "First Name",
                         ag.last_name "Last Name",
                         ag.address_line_1 "Address Line 1",
                         ag.address_line_2 "Address Line 2",
@@ -79,7 +80,11 @@ def db_get_appointment_display():
                         concat(pr.address_line_1, ', ', pr.address_line_2, ', ', pr.city, ', ', pr.state, ', ', pr.zip) "Property Address",
                         date(ap.tour_datetime) "Tour Date",
                         time(ap.tour_datetime) "Tour Time",
-                        ap.outcome "Outcome"
+                        ap.outcome "Outcome",
+                        ap.agent_id,
+                        ap.client_id,
+                        ap.property_id,
+                        ap.tour_datetime
                 from appointments ap
                 join agents ag on ap.agent_id = ag.agent_id
                 join clients cl on ap.client_id = cl.client_id
@@ -100,7 +105,8 @@ def db_get_client_display():
 
     try:
         query = f"""
-                select  cl.first_name "First Name",
+                select  cl.client_id "Record ID",
+                        cl.first_name "First Name",
                         cl.last_name "Last Name",
                         concat('$ ', cl.budget) "Budget",
                         cl.preferred_move_date "Preferred Move Date",
@@ -134,7 +140,8 @@ def db_get_properties_display():
 
     try:
         query = f"""
-                select  pr.address_line_1 "Address Line 1",
+                select  pr.property_id "Record ID",
+                        pr.address_line_1 "Address Line 1",
                         pr.address_line_2 "Address Line 2",
                         pr.city "City",
                         pr.state "State",
@@ -165,12 +172,13 @@ def db_get_properties_display():
         return None
     
 # function to join agents table to properties
-def db_get_properties_by_id(property_id, agent_id):
+def db_get_properties_by_id(property_id):
     engine = db_connect()
 
     try:
         query = f"""
-                select  pr.address_line_1 "Address Line 1",
+                select  pr.property_id,
+                        pr.address_line_1 "Address Line 1",
                         pr.address_line_2 "Address Line 2",
                         pr.city "City",
                         pr.state "State",
@@ -191,7 +199,7 @@ def db_get_properties_by_id(property_id, agent_id):
                         end "Sold"
                 from properties pr
                 join agents ag on pr.agent_id = ag.agent_id
-                where pr.property_id = {property_id} AND ag.agent_id = {agent_id}
+                where pr.property_id = {property_id}
                 order by ag.last_name
         """
         # use the engine directly with pandas
@@ -207,7 +215,8 @@ def db_get_agent_by_id(agent_id):
 
     try:
         query = f"""
-                select  ag.first_name "First Name",
+                select  ag.agent_id,
+                        ag.first_name "First Name",
                         ag.last_name "Last Name",
                         ag.address_line_1 "Address Line 1",
                         ag.address_line_2 "Address Line 2",
@@ -233,7 +242,8 @@ def db_get_client_by_id(client_id):
 
     try:
         query = f"""
-                select  cl.first_name "First Name",
+                select  cl.client_id,
+                        cl.first_name "First Name",
                         cl.last_name "Last Name",
                         cl.budget "Budget",
                         cl.preferred_move_date "Preferred Move Date",
@@ -248,8 +258,9 @@ def db_get_client_by_id(client_id):
                             when true then "Yes"
                             else "No"
                         end "Sold",
-                        cl.agent_id "Agent ID"
+                        concat(ag.first_name, ' ', ag.last_name) "Agent Name"
                 from clients cl
+                join agents ag on cl.agent_id = ag.agent_id
                 where cl.client_id = {client_id}
                 order by cl.last_name
         """
@@ -266,13 +277,20 @@ def db_get_appointment_by_id(agent_id, client_id, property_id, tour_datetime):
 
     try:
         query = f"""
-                select  ap.agent_id "Agent ID",
-                        ap.client_id "Client ID",
-                        ap.property_id "Property ID",
-                        ap.tour_datetime "Tour Datetime",
+                select  concat(ag.first_name, ' ', ag.last_name) "Agent Name",
+                        concat(cl.first_name, ' ', cl.last_name) "Client Name",
+                        concat(pr.address_line_1, ', ', pr.address_line_2, ', ', pr.city, ', ', pr.state, ', ', pr.zip) "Property Address",
+                        date(ap.tour_datetime) "Tour Date",
+                        time(ap.tour_datetime) "Tour Time",
                         ap.outcome "Outcome"
                 from appointments ap
-                where ap.agent_id = {agent_id} and ap.client_id = {client_id} and ap.property_id = {property_id} and ap.tour_datetime = '{tour_datetime}'
+                join agents ag on ap.agent_id = ag.agent_id
+                join clients cl on ap.client_id = cl.client_id
+                join properties pr on ap.property_id = pr.property_id
+                where ap.agent_id = {agent_id}
+                    and ap.client_id = {client_id}
+                    and ap.property_id = {property_id}
+                    and ap.tour_datetime = '{tour_datetime}'
 
         """
         # use the engine directly with pandas
@@ -408,6 +426,7 @@ def update_property(data):
                          year_built = :year_built,
                          on_market = :on_market,
                          off_market = :off_market,
+                         agent_id = :agent_id,
                          sold = :sold
         where property_id = :property_id
     """)
@@ -459,6 +478,8 @@ def update_client(data):
 def update_appointment(data):
     engine = db_connect()
 
+    print(data)
+
     sql_statement = text("""
         update appointments 
         set agent_id = :agent_id,
@@ -478,6 +499,7 @@ def update_appointment(data):
     except ProgrammingError as e:
         print(f"Update failed: {e}")
         return False
+
 
 # function to update an existing agent record into the database
 def update_agent(data):
@@ -519,9 +541,13 @@ def delete_agent(data):
                              """)
         
         with engine.connect() as connection:
-            connection.execute(sql_statement, data)
+            result = connection.execute(sql_statement, data)
             connection.commit()
-            return True
+
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
     except Exception as err:
         print(f"Error: {err}")
         return None
@@ -539,9 +565,13 @@ def delete_appointment(data):
     # execute database insert
     try:
         with engine.connect() as connection:
-            connection.execute(sql_statement, data)
+            result = connection.execute(sql_statement, data)
             connection.commit()
-            return True
+
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
     except ProgrammingError as e:
         print(f"Delete failed: {e}")
         return False
@@ -558,9 +588,13 @@ def delete_client(data):
     # execute database insert
     try:
         with engine.connect() as connection:
-            connection.execute(sql_statement, data)
+            result = connection.execute(sql_statement, data)
             connection.commit()
-            return True
+
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
     except ProgrammingError as e:
         print(f"Delete failed: {e}")
         return False
@@ -577,9 +611,13 @@ def delete_property(data):
     # execute database insert
     try:
         with engine.connect() as connection:
-            connection.execute(sql_statement, data)
+            result = connection.execute(sql_statement, data)
             connection.commit()
-            return True
+
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
     except ProgrammingError as e:
         print(f"Delete failed: {e}")
         return False

@@ -12,6 +12,7 @@ from utilities.db_utils import *
 #######################
 # display the appropriate sidebar nav
 appointment_menu()
+st.title("Real Estate Management System")
 
 data = {
         "agent_name": "",

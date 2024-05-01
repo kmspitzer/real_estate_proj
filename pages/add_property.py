@@ -6,6 +6,7 @@ from pages.property_form import property_form
 
 # display the appropriate sidebar nav
 property_menu()
+st.title("Real Estate Management System")
 
 data = {
         "address_line_1": "",

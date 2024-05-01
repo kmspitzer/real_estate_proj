@@ -4,7 +4,8 @@ from utilities.db_utils import *
 
 try:
     agent_menu()
-    st.title("Delete Appointments")
+    st.title("Real Estate Management System")
+    st.write("## Delete Appointments")
 
     st.write(db_get_table("appointments"))
 
@@ -25,11 +26,12 @@ try:
                     "tour_datetime": tour_datetime}
         
         # call the function to delete the record from the database
-        success = delete_appointment(data)
-        if success:
-            st.success(f"Appointment deleted.")
-        else:
-            st.error("An error occurred while deleting the appointment.")
+        if submitted:
+            success = delete_appointment(data)
+            if success:
+                st.success(f"Appointment deleted.")
+            else:
+                st.error("An error occurred while deleting the appointment.")
 
 except Exception:
     print("Please enter values in the text boxes.")

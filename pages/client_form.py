@@ -12,25 +12,29 @@ def client_form(action, data):
     ##################
     ##  CLIENT FORM ##
     ##################
-
     default_state_index = state_list.index(data['state']) if data['state'] in state_list else 0
 
     move_date_str = data.get('preferred_move_date', '')  # Fallback to '' if not present
     if move_date_str:
-        move_date_default = datetime.strptime(move_date_str, '%Y-%m-%d').date()
+        # Convert string to datetime.date object
+        if isinstance(move_date_str, date):
+            move_date_default = move_date_str
+        else:
+            # Only parse if start_date_str is a string
+            move_date_default = datetime.strptime(move_date_str, '%Y-%m-%d').date()
     else:
         move_date_default = None
 
     # get agent names for association
     agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
-    default_agent_index = agent_names.index(data['agent_name']) if data['agent_name'] in agent_names else 0
+    default_agent_index = agent_names.index(data['agent_name']) + 1 if data['agent_name'] in agent_names else 0
     default_status_index = status_list.index(data['status']) if data['status'] in status_list else 0
 
     # display form and collect data
     with st.form("client_form"):
         st.write(f"## {action} Client")
 
-        # name
+         # name
         first_name = st.text_input("First Name", value=data['first_name'], max_chars=50).strip()
         last_name = st.text_input("Last Name", value=data['last_name'], max_chars=50).strip()
 
@@ -70,6 +74,7 @@ def client_form(action, data):
         if submitted:
             # collect the data into a dictionary
             data = {
+                    "client_id": data["client_id"],
                     "first_name": first_name,
                     "last_name": last_name,
                     "budget": budget,
@@ -97,14 +102,15 @@ def client_form(action, data):
 
                 # get the agent_id from mapping
                 data['agent_id'] = agent_mapping.get(agent_name)
+                print(data['agent_id'])
 
                 if action == "Add":
                     # call function to insert the record into the database
                     success = insert_client(data)
                 else:
-                    success = True
-                    st.write(action)
-                
+                    print(data)
+                    success = update_client(data)
+                    
                 if success:
                     st.success(f"Client {action.lower()}ed.")
                 else:

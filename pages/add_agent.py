@@ -15,8 +15,10 @@ from config.re_config import state_list
 
 # display the appropriate sidebar nav
 agent_menu()
+st.title("Real Estate Management System")
 
 data = {
+        "agent_id": "",
         "first_name": "",
         "last_name": "",
         "address_line_1": "",

@@ -3,24 +3,37 @@ from menu import agent_menu
 from utilities.db_utils import *
 
 agent_menu()
-st.title("Delete Agents")
+st.title("Real Estate Managment System")
 
-st.write(db_get_table("agents"))
+# button to reset the view and select another agent
+if st.button('Refresh Agents'):
+    st.session_state['agent_data'] = None
+    st.session_state['delete_agent'] = False
 
-with st.form("agent_form"):
-    st.write("## Delete Existing Agent")
+# get agents for display on screen
+st.write(db_get_agent_display().to_html(index=False), unsafe_allow_html=True)
 
-    agent_id = st.text_input("Agent ID", max_chars=10).strip()
+with st.form("agent_delete_form"):
+    st.write("## Delete Agent")
 
+    # accept record id input
+    record_id = st.text_input("Record ID", max_chars=50).strip()
     # form submission button
+
     submitted = st.form_submit_button("Delete Agent")
 
-    data = {
-                "agent_id": agent_id}
+    if submitted:
+        # submit button clicked -- initialize validated flag
+        validated = True
 
-    # call the function to delete the record from the database
-    success = delete_agent(data)
-    if success:
-        st.success(f"Agent deleted.")
-    else:
-        st.error("An error occurred while deleting the agent.")
+        if not record_id.isdigit():
+            st.error("Record ID must be numeric.")
+            validated = False
+
+        if validated:
+            # call the function to delete the record from the database
+            success = delete_agent({'agent_id': record_id})
+            if success:
+                st.success(f"Agent deleted.")
+            else:
+                st.error("Record ID does not exist.")
