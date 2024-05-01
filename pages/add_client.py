@@ -9,10 +9,12 @@ from utilities.db_utils import *
 ## ADD NEW CLIENT ##
 ####################
 
-# display the appropriate sidebar nav
+# display the appropriate sidebar nav and
+# system title
 client_menu()
 st.title("Real Estate Management System")
 
+# initialize data object for new client
 data = {
         "first_name": "",
         "last_name": "",
@@ -29,4 +31,5 @@ data = {
         "sold": False
 }
 
+# display client form
 client_form("Add", data)

@@ -3,6 +3,8 @@ from utilities.db_utils import *
 from utilities.real_estate_utils import *
 
 def choose_client():
+
+    # apply CSS for table display
     apply_custom_css()
 
     # get agents for display on screen
@@ -12,7 +14,7 @@ def choose_client():
     with st.form("client_view_form"):
         st.write("## View/Edit Client")
 
-        # accept record id input
+        # accept client id input
         record_id = st.text_input("Client ID", max_chars=50).strip()
 
         # display submit button and wait on click
@@ -22,12 +24,13 @@ def choose_client():
             # submit button clicked -- initialize validated flag
             validated = True
 
+            # perform any edits on client id
             if not record_id.isdigit():
                 st.error("Client ID must be numeric.")
                 validated = False
 
             if validated:
-                # record id was valid -- get the agent requested
+                # record id was valid -- get the client requested
                 client = db_get_client_by_id(int(record_id))
 
                 # populate data object for next form

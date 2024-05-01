@@ -3,6 +3,8 @@ from utilities.db_utils import *
 from utilities.real_estate_utils import *
 
 def choose_agent():
+
+    # apply CSS for table display
     apply_custom_css()
 
     # get agents for display on screen
@@ -22,12 +24,13 @@ def choose_agent():
             # submit button clicked -- initialize validated flag
             validated = True
 
+            # perform any edits on agent id
             if not record_id.isdigit():
                 st.error("Agent ID must be numeric.")
                 validated = False
 
             if validated:
-                # record id was valid -- get the agent requested
+                # agent id was valid -- get the agent requested
                 agent = db_get_agent_by_id(int(record_id))
 
                 # populate data object for next form

@@ -27,14 +27,15 @@ with st.form("delete_appt_form"):
 
     # accept record id input
     record_id = st.text_input("Appt ID", max_chars=50).strip()
+    
     # form submission button
-
     submitted = st.form_submit_button("Delete Appointment")
 
     if submitted:
         # submit button clicked -- initialize validated flag
         validated = True
 
+        # perform any edits on appointment id
         if not record_id.isdigit():
             st.error("Appt ID must be numeric.")
             validated = False

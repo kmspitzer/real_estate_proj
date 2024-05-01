@@ -2,6 +2,8 @@ import streamlit as st
 from menu import agent_menu
 from utilities.db_utils import *
 
+
+# display agent sidebar
 agent_menu()
 st.title("Real Estate Managment System")
 
@@ -13,21 +15,23 @@ if st.button('Refresh Agents'):
 # get agents for display on screen
 st.write(db_get_agent_display().to_html(index=False), unsafe_allow_html=True)
 
+# display form
 with st.form("delete_agent_form"):
     st.write("## Delete Agent")
 
     # accept record id input
-    record_id = st.text_input("Record ID", max_chars=50).strip()
-    # form submission button
+    record_id = st.text_input("Agent ID", max_chars=50).strip()
 
+    # form submission button
     submitted = st.form_submit_button("Delete Agent")
 
     if submitted:
         # submit button clicked -- initialize validated flag
         validated = True
 
+        # perform any edits on 
         if not record_id.isdigit():
-            st.error("Record ID must be numeric.")
+            st.error("Agent ID must be numeric.")
             validated = False
 
         if validated:

@@ -11,17 +11,20 @@ def agent_form(action, data):
     ################
     ## AGENT FORM ##
     ################
+
+    # need to initialize incoming data to handle drop downs
     default_state_index = state_list.index(data['state']) if data['state'] in state_list else 0
 
+    # initialize to current date, if another is not set
     start_date_str = data.get('start_date', 'today')  # Fallback to 'today' if not present
     if start_date_str == 'today':
         start_date_default = datetime.today().date()
     else:
-        # Convert string to datetime.date object
+        # convert string to datetime.date object
         if isinstance(start_date_str, date):
             start_date_default = start_date_str
         else:
-            # Only parse if start_date_str is a string
+            # only parse if start_date_str is a string
             start_date_default = datetime.strptime(start_date_str, '%Y-%m-%d').date()
 
     # display form and collect data
@@ -38,16 +41,17 @@ def agent_form(action, data):
         city = st.text_input("City", value=data['city'], max_chars=30).strip()
         # Find the index of the state in state_list. If not found, default to 0 (or any other default index)
 
-        # Use the index parameter to set the default selection
+        # use the index parameter to set the default selection in the dropdown
         state = st.selectbox("State", state_list, index=default_state_index)
 
+        # zip
         zip = st.text_input("ZIP", value=data['zip'], max_chars=5).strip()
 
         # phone number
         phone = st.text_input("Phone", value=data['phone'], max_chars=15).strip()
 
+        # start date
         start_date = st.date_input("Start Date", start_date_default)
-
 
         # form submission button
         db_submitted = st.form_submit_button(f"{action} Agent")
@@ -78,7 +82,7 @@ def agent_form(action, data):
                 # format phone number
                 data['phone'] = standardize_phone_number(phone)
 
-                # call function to insert the record into the database
+                # call function to insert/update record in db
                 if action == "Add":
                     success = insert_agent(data)
                 else:

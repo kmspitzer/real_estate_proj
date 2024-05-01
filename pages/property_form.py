@@ -15,17 +15,19 @@ def property_form(action, data):
     # get agent names for association
     agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
 
+    # get indexes for dropdowns
     default_agent_index = agent_names.index(data['agent_name']) + 1 if data['agent_name'] in agent_names else 0
     default_state_index = state_list.index(data['state']) if data['state'] in state_list else 0
     default_type_index = type_list.index(data['type']) if data['type'] in type_list else 0
 
-    on_market_date_str = data.get('on_market_date', '')  # Fallback to '' if not present
+    # initialize date fields
+    on_market_date_str = data.get('on_market_date', '')  # Fallback to today if not present
     if on_market_date_str:
         on_market_date_str = datetime.strptime(on_market_date_str, '%Y-%m-%d').date()
     else:
         on_market_date_str = None
 
-    off_market_date_str = data.get('off_market_date', '')  # Fallback to '' if not present
+    off_market_date_str = data.get('off_market_date', '')  # Fallback to now if not present
     if off_market_date_str:
         off_market_date_str = datetime.strptime(off_market_date_str, '%Y-%m-%d').date()
     else:
@@ -122,6 +124,7 @@ def property_form(action, data):
                     # call function to insert the record into the database
                     success = insert_property(data)
                 else:
+                    # call function to update record in database
                     success = update_property(data)
                 
                 if success:

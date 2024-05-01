@@ -18,18 +18,18 @@ appointment_menu()
 # display titles
 st.title("Real Estate Management System")
 
-# button to reset the view and select another agent
+# button to reset the view and select another appointment
 if st.button('Refresh Appointments'):
     st.session_state['appt_data'] = None
     st.session_state['view_appt'] = False
 
-# display and handle the first form if no client is currently being viewed/edited
+# display and handle the first form if no appointment is currently being viewed/edited
 if st.session_state['appt_data'] is None or not st.session_state['view_appt']:
     data = choose_appointment()
     if data:
         st.session_state['appt_data'] = data
         st.session_state['view_appt'] = True
 
-# display the agent form if an agent has been selected
+# display the appointment form if an agent has been selected
 if st.session_state['appt_data'] and st.session_state['view_appt']:
     appointment_form("Update", st.session_state['appt_data'])

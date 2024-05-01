@@ -12,13 +12,13 @@ if 'client_data' not in st.session_state:
 if 'view_client' not in st.session_state:
     st.session_state['view_client'] = False
 
-# display agent sidebar
+# display client sidebar
 client_menu()
 
 # display titles
 st.title("Real Estate Management System")
 
-# button to reset the view and select another agent
+# button to reset the view and select another client
 if st.button('Refresh Clients'):
     st.session_state['client_data'] = None
     st.session_state['view_client'] = False
@@ -30,6 +30,6 @@ if st.session_state['client_data'] is None or not st.session_state['view_client'
         st.session_state['client_data'] = data
         st.session_state['view_client'] = True
 
-# display the agent form if an agent has been selected
+# display the client form if an client has been selected
 if st.session_state['client_data'] and st.session_state['view_client']:
     client_form("Update", st.session_state['client_data'])

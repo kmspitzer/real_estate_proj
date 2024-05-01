@@ -12,20 +12,23 @@ def client_form(action, data):
     ##################
     ##  CLIENT FORM ##
     ##################
+    # get the index for the state dropdown
     default_state_index = state_list.index(data['state']) if data['state'] in state_list else 0
 
+    # if no date is specified, we default to today
     move_date_str = data.get('preferred_move_date', '')  # Fallback to '' if not present
     if move_date_str:
-        # Convert string to datetime.date object
+        # convert string to datetime.date object
         if isinstance(move_date_str, date):
             move_date_default = move_date_str
         else:
-            # Only parse if start_date_str is a string
+            # only parse if start_date_str is a string
             move_date_default = datetime.strptime(move_date_str, '%Y-%m-%d').date()
     else:
+        # can be empty
         move_date_default = None
 
-    # get agent names for association
+    # get agent names for association and determine index for dropdown
     agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
     default_agent_index = agent_names.index(data['agent_name']) + 1 if data['agent_name'] in agent_names else 0
     default_status_index = status_list.index(data['status']) if data['status'] in status_list else 0
@@ -108,7 +111,7 @@ def client_form(action, data):
                     # call function to insert the record into the database
                     success = insert_client(data)
                 else:
-                    print(data)
+                    # call function to update the record in the database
                     success = update_client(data)
                     
                 if success:

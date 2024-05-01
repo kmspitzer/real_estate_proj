@@ -3,19 +3,22 @@ from utilities.db_utils import *
 from utilities.real_estate_utils import *
 
 def choose_property():
+
+    # apply CSS for table display
     apply_custom_css()
 
+    # get the property records for display and empty null fields
     prop_df = db_get_properties_display()
     prop_df = prop_df.fillna('')
 
-    # get agents for display on screen
+    # write out the table
     st.write(prop_df.to_html(index=False), unsafe_allow_html=True)
 
     # display form
     with st.form("property_view_form"):
         st.write("## View/Edit Properties")
 
-        # accept record id input
+        # accept property id input
         record_id = st.text_input("Property ID", max_chars=50).strip()
 
         # display submit button and wait on click
@@ -25,12 +28,13 @@ def choose_property():
             # submit button clicked -- initialize validated flag
             validated = True
 
+            # perform any edits on property id
             if not record_id.isdigit():
                 st.error("Property ID must be numeric.")
                 validated = False
 
             if validated:
-                # record id was valid -- get the agent requested
+                # record id was valid -- get the property requested
                 property = db_get_properties_by_id(int(record_id))
 
                 # populate data object for next form
