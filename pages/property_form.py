@@ -15,17 +15,19 @@ def property_form(action, data):
     # get agent names for association
     agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
 
-    default_agent_index = agent_names.index(data['agent_name']) if data['agent_name'] in agent_names else 0
+    # get indexes for dropdowns
+    default_agent_index = agent_names.index(data['agent_name']) + 1 if data['agent_name'] in agent_names else 0
     default_state_index = state_list.index(data['state']) if data['state'] in state_list else 0
     default_type_index = type_list.index(data['type']) if data['type'] in type_list else 0
 
-    on_market_date_str = data.get('on_market_date', '')  # Fallback to '' if not present
+    # initialize date fields
+    on_market_date_str = data.get('on_market_date', '')  # Fallback to today if not present
     if on_market_date_str:
         on_market_date_str = datetime.strptime(on_market_date_str, '%Y-%m-%d').date()
     else:
         on_market_date_str = None
 
-    off_market_date_str = data.get('off_market_date', '')  # Fallback to '' if not present
+    off_market_date_str = data.get('off_market_date', '')  # Fallback to now if not present
     if off_market_date_str:
         off_market_date_str = datetime.strptime(off_market_date_str, '%Y-%m-%d').date()
     else:
@@ -48,23 +50,29 @@ def property_form(action, data):
         with col1:
             st.markdown("&#36;", unsafe_allow_html=True)  # HTML code for dollar sign
         with col2:
-            original_listing_price = st.text_input("Original Listing Price", value=data["original_listing_price"])
+            orig_price_value = data['original_listing_price'] if data['original_listing_price'] is not None else ""
+            original_listing_price = st.text_input("Original Listing Price", value=orig_price_value)
 
         # sold price
         col1, col2 = st.columns([1, 20])
         with col1:
             st.markdown("&#36;", unsafe_allow_html=True)  # HTML code for dollar sign
         with col2:
-            sold_price = st.text_input("Sold Price", value=data["sold_price"])
+            sold_price_value = data['sold_price'] if data['sold_price'] is not None else ""
+            sold_price = st.text_input("Sold Price", value=sold_price_value)
 
         # type of property
         type = st.selectbox("Type", type_list, index=default_type_index)
 
         # property characteristics
-        sqft = st.text_input("Square Feet", value=data['sqft']).strip()
-        bedrooms = st.text_input("Bedrooms", value=data["bedrooms"]).strip()
-        bathrooms = st.text_input("Bathrooms", value=data['bathrooms']).strip()
-        year_built = st.text_input("Year Built", value=data['year_built']).strip()
+        sqft_value = data['sqft'] if data['sqft'] is not None else ""
+        sqft = st.text_input("Square Feet", value=sqft_value).strip()
+        bedroom_value = data['bedrooms'] if data['bedrooms'] is not None else ""
+        bedrooms = st.text_input("Bedrooms", value=bedroom_value).strip()
+        bathroom_value = data['bathrooms'] if data['bathrooms'] is not None else ""
+        bathrooms = st.text_input("Bathrooms", value=bathroom_value).strip()
+        year_value = data['year_built'] if data['year_built'] is not None else ""
+        year_built = st.text_input("Year Built", value=year_value).strip()
 
         # on/off market dates
         on_market = st.date_input("On Market Date", value=on_market_date_str)
@@ -83,6 +91,7 @@ def property_form(action, data):
         if submitted:
             # collect the data into a dictionary
             data = {
+                    "property_id": data["property_id"],
                     "address_line_1": address_line_1,
                     "address_line_2": address_line_2,
                     "city": city,
@@ -115,8 +124,8 @@ def property_form(action, data):
                     # call function to insert the record into the database
                     success = insert_property(data)
                 else:
-                    st.write('action')
-                    success = True
+                    # call function to update record in database
+                    success = update_property(data)
                 
                 if success:
                     st.success(f"Property {action.lower()}ed.")

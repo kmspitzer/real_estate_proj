@@ -14,9 +14,13 @@ from config.re_config import state_list
 
 
 # display the appropriate sidebar nav
+# and system title
 agent_menu()
+st.title("Real Estate Management System")
 
+# initialize data object for new agent
 data = {
+        "agent_id": "",
         "first_name": "",
         "last_name": "",
         "address_line_1": "",
@@ -28,4 +32,5 @@ data = {
         "start_date": "today"
 }
 
+# display agent form
 agent_form("Add", data)

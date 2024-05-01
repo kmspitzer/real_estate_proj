@@ -1,103 +1,35 @@
 import streamlit as st
 from menu import agent_menu
 from utilities.db_utils import *
-from config.re_config import state_list
-from pages.standardize_phone import standardize_phone_number
 
-# place holder
+from pages.agent_form import agent_form
+from pages.choose_agent import choose_agent
+
+
+# initialize session state variables
+if 'agent_data' not in st.session_state:
+    st.session_state['agent_data'] = None
+if 'view_agent' not in st.session_state:
+    st.session_state['view_agent'] = False
+
+# display agent sidebar
 agent_menu()
-st.title("View/Edit Agents")
 
-st.write(db_get_table("agents"))
+# display titles
+st.title("Real Estate Management System")
 
-with st.form("agent_form"):
-    st.write("## Update Existing Agent")
+# button to reset the view and select another agent
+if st.button('Refresh Agents'):
+    st.session_state['agent_data'] = None
+    st.session_state['view_agent'] = False
 
-    agent_id = st.text_input("Agent ID", max_chars=50).strip()
-    agent = db_get_agent_by_id(agent_id)
+# display and handle the first form if no agent is currently being viewed/edited
+if st.session_state['agent_data'] is None or not st.session_state['view_agent']:
+    data = choose_agent()
+    if data:
+        st.session_state['agent_data'] = data
+        st.session_state['view_agent'] = True
 
-    # name
-    first_name = st.text_input("First Name", value=str(agent['First Name'].values[0]), max_chars=50).strip()
-    last_name = st.text_input("Last Name", value=str(agent['Last Name'].values[0]), max_chars=50).strip()
-
-    # address with state dropdown
-    address_line_1 = st.text_input("Address Line 1", value=str(agent['Address Line 1'].values[0]), max_chars=90).strip()
-    address_line_2 = st.text_input("Address Line 2", value=str(agent['Address Line 2'].values[0]), max_chars=50).strip()
-    city = st.text_input("City", value=str(agent['City'].values[0]), max_chars=30).strip()
-    state = st.text_input("State", value=str(agent['State'].values[0])).strip()
-    zip = st.text_input("ZIP", value=str(agent['ZIP'].values[0]), max_chars=5).strip()
-
-    # phone number
-    phone = st.text_input("Phone", value=str(agent['Phone'].values[0]), max_chars=15).strip()
-
-    start_date = st.text_input("Start Date", value=str(agent['Start Date'].values[0])).strip()
-
-
-    # form submission button
-    submitted = st.form_submit_button("Submit Agent")
-
-    # when form is submitted, we edit
-    if submitted:
-        # initialize a flag to track validation status
-        validation_successful = True
-
-        # check each field separately
-        if not first_name:
-            st.error('First Name is required.')
-            validation_successful = False
-
-        if not last_name:
-            st.error('Last Name is required.')
-            validation_successful = False
-
-        if not address_line_1:
-            st.error('Address Line 1 is required.')
-            validation_successful = False
-
-        if not city:
-            st.error('City is required.')
-            validation_successful = False
-
-        if not state:
-            st.error('State is required.')
-            validation_successful = False
-        if state not in state_list:
-            st.error('State is not valid')
-            validation_successful = False
-
-        # ensure zip is 5-digit
-        if len(zip) != 5 or not zip.isdigit():
-            st.error('A valid ZIP code is required.')
-            validation_successful = False
-
-        # standardize phone number (nnn) nnn-nnnn
-        # as long as we get 10 digits
-        try:
-            phone = standardize_phone_number(phone)
-        except:
-            st.error('Enter valid Phone.')
-            validation_successful = False
-
-        # if all fields are valid, proceed to process the form
-        if validation_successful:
-
-            # collect the data into a dictionary
-            data = {
-                "agent_id": agent_id,
-                "first_name": first_name,
-                "last_name": last_name,
-                "address_line_1": address_line_1,
-                "address_line_2": address_line_2,
-                "city": city,
-                "state": state,
-                "zip": zip,
-                "phone": phone,
-                "start_date": start_date
-            }
-
-            # call the function to insert the record into the database
-            success = update_agent(data)
-            if success:
-                st.success(f"Agent updated.")
-            else:
-                st.error("An error occurred while updating the agent.")
+# display the agent form if an agent has been selected
+if st.session_state['agent_data'] and st.session_state['view_agent']:
+    agent_form("Update", st.session_state['agent_data'])

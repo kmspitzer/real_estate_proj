@@ -1,5 +1,7 @@
 import streamlit as st
+from utilities.real_estate_utils import *
 
+st.set_page_config(layout='wide')
 ##############################
 ## SIDEBAR MENU DEFINITIONS ##
 ##############################
@@ -19,6 +21,7 @@ def authenticated_menu():
 def property_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent'
+
     # show a navigation menu for users with access to property functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -37,6 +40,7 @@ def property_menu():
 def agent_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent Manager'
+
     # show a navigation menu for users with access to agent functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -55,6 +59,7 @@ def agent_menu():
 def client_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent'
+
     # show a navigation menu for users with access to client functions
     st.sidebar.page_link("app.py", label="Switch User Type")
     st.sidebar.write("")
@@ -74,6 +79,7 @@ def client_menu():
 def appointment_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent'
+
     # show a navigation menu for users with access to appointment functions
     st.sidebar.page_link("app.py", label="Switch user type")
     st.sidebar.write("")
@@ -96,6 +102,7 @@ def appointment_menu():
 
 
 def menu():
+    # display the title at the top of every page
     # Determine if a user is logged in or not, then show the correct
     # navigation menu
     if "role" not in st.session_state or st.session_state.role is None:

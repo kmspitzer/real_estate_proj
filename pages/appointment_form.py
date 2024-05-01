@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, time
 from pages.get_players import get_players
 from pages.get_properties import get_properties
 from pages.validate_appointment import validate_appointment
@@ -13,31 +13,42 @@ def appointment_form(action, data):
     ## APPOINTMENT FORM ##
     ######################
 
-    # get agent and client names for association
+    # get agent and client names and property addresses for association
     agent_names, agent_mapping = get_players('agents', 'agent_id', 'agent_name')
     client_names, client_mapping = get_players('clients', 'client_id', 'client_name')
     property_addresses, property_mapping = get_properties()
 
-    default_agent_index = agent_names.index(data['agent_name']) if data['agent_name'] in agent_names else 0
-    default_client_index = client_names.index(data['client_name']) if data['client_name'] in client_names else 0
-    default_property_index = property_addresses.index(data['property_address']) if data['property_address'] in property_addresses else 0
-    default_outcome_index = outcome_list.index(data['outcome'] if data['outcome'] in outcome_list else 0)
+    # get map index for agent, client and property
+    default_agent_index = agent_names.index(data['agent_name']) + 1 if data['agent_name'] in agent_names else 0
+    default_client_index = client_names.index(data['client_name']) + 1 if data['client_name'] in client_names else 0
+    default_property_index = property_addresses.index(data['property_address']) + 1 if data['property_address'] in property_addresses else 0
 
+    # get map index for outcome
+    default_outcome_index = outcome_list.index(data['outcome'] if data['outcome'] in outcome_list else "")
+
+    # if tour date is empty, we default to today
     tour_date_str = data.get('tour_date', 'today')  # Fallback to 'today' if not present
     if tour_date_str == 'today':
         tour_date_default = datetime.today().date()
     else:
-        # Convert string to datetime.date object
-        tour_date_default = datetime.strptime(tour_date_str, '%Y-%m-%d').date()
+        # ensure we have a date string for tour date
+        if isinstance(tour_date_str, date):
+            tour_date_default = tour_date_str
+        else:
+            # only parse if tour_date_str is a string
+            tour_date_default = datetime.strptime(tour_date_str, '%Y-%m-%d').date()
 
-    tour_time_str = data.get('tour_time', 'now')  # Fallback to 'today' if not present
+    # if tour time is empty, we default to now
+    tour_time_str = data.get('tour_time', 'now')  # Fallback to 'now' if not present
     if tour_time_str == 'now':
         tour_time_default = datetime.now().time()
     else:
-        # Convert string to datetime.date object
-        tour_time_default = datetime.strptime(tour_time_str, '%H:%M').time()
-
-
+        # ensure we have a time string
+        if isinstance(tour_time_str, time):
+            tour_time_default = tour_time_str
+        else:
+            # only parse if tour_time_str is a string
+            tour_time_default = datetime.strptime(tour_time_str, '%H:%M').time()
 
     # display form and collect data
     with st.form("appointment_form"):
@@ -87,10 +98,14 @@ def appointment_form(action, data):
                 data['property_id'] = property_mapping.get(property_address)
 
                 # need to store tour date and time as a timestamp in our database
-                data['tour_datetime'] = datetime.combine(tour_date, tour_time)
+                data['tour_datetime'] = datetime.combine(tour_date, tour_time).strftime('%Y-%m-%d %H:%M')
 
-                # call function to insert the record into the database
-                success = insert_appointment(data)
+                if action == "Add":
+                    # call function to insert the record into the database
+                    success = insert_appointment(data)
+                else:
+                    # call function to update record in the database
+                    success = update_appointment(data)
 
                 if success:
                     st.success(f"Appointment {action.lower()}ed.")

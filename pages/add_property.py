@@ -4,9 +4,12 @@ from pages.property_form import property_form
 
 
 
-# display the appropriate sidebar nav
+# display the appropriate sidebar nav and
+# system title
 property_menu()
+st.title("Real Estate Management System")
 
+# initialize data object for new property
 data = {
         "address_line_1": "",
         "address_line_2": "",
@@ -26,4 +29,5 @@ data = {
         "sold": False
 }
 
+# display property form
 property_form("Add", data)

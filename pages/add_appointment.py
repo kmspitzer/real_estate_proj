@@ -10,9 +10,12 @@ from utilities.db_utils import *
 #######################
 ##  ADD APPOINTMENT  ##
 #######################
-# display the appropriate sidebar nav
+# display the appropriate sidebar nav and
+# system title
 appointment_menu()
+st.title("Real Estate Management System")
 
+# initialize data object for new appointment
 data = {
         "agent_name": "",
         "client_name": "",
@@ -22,4 +25,5 @@ data = {
         "outcome": ""
 }
 
+# display appointment form
 appointment_form("Add", data)
