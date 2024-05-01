@@ -23,7 +23,7 @@ if pd.api.types.is_timedelta64_dtype(appt['Tour Time']):
     st.write(disp_appts.to_html(index=False), unsafe_allow_html=True)
 
 with st.form("delete_appt_form"):
-    st.write("## Delete Appoointments")
+    st.write("## Delete Appointments")
 
     # accept record id input
     record_id = st.text_input("Appt ID", max_chars=50).strip()
