@@ -26,9 +26,9 @@ def choose_appointment():
         record_id = st.text_input("Appt ID", max_chars=50).strip()
 
         # display submit button and wait on click
-        view_submitted = st.form_submit_button("View Appointment Details")
+        submitted = st.form_submit_button("View Appointment Details")
 
-        if view_submitted:
+        if submitted:
             # submit button clicked -- initialize validated flag
             validated = True
 
