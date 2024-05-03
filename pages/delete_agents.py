@@ -1,11 +1,15 @@
 import streamlit as st
 from menu import agent_menu
 from utilities.db_utils import *
+from utilities.real_estate_utils import *
 
 
 # display agent sidebar
 agent_menu()
 st.title("Real Estate Managment System")
+
+# apply CSS for table display
+apply_custom_css()
 
 # button to reset the view and select another agent
 if st.button('Refresh Agents'):

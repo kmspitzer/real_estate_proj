@@ -1,10 +1,15 @@
 import streamlit as st
 from menu import property_menu
 from utilities.db_utils import *
+from utilities.real_estate_utils import *
 
 
 # display property sidebar and center title
 property_menu()
+
+# apply CSS for table display
+apply_custom_css()
+
 st.title("Real Estate Managment System")
 
 # button to reset the view and select another agent
