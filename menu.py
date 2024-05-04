@@ -18,6 +18,7 @@ def authenticated_menu():
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
+
 def property_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent'
@@ -36,6 +37,7 @@ def property_menu():
         st.sidebar.page_link("pages/delete_properties.py", label="-->> Delete Properties")
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
+
 
 def agent_menu():
     if 'role' not in st.session_state:
@@ -56,9 +58,11 @@ def agent_menu():
         st.sidebar.page_link("pages/client_options.py", label="Manage Clients")
         st.sidebar.page_link("pages/appointment_options.py",label="Manage Appointments")
 
+
 def client_menu():
     if 'role' not in st.session_state:
         st.session_state.role = 'Agent'
+
 
     # show a navigation menu for users with access to client functions
     st.sidebar.page_link("app.py", label="Switch User Type")
@@ -94,11 +98,6 @@ def appointment_menu():
         st.sidebar.page_link("pages/add_appointment.py", label="-->> Add Appointment")
         st.sidebar.page_link("pages/view_edit_appointments.py", label="-->> View/Edit Appointments")
         st.sidebar.page_link("pages/delete_appointments.py", label="-->> Delete Appointments")
-
-
-# def unauthenticated_menu():
-#     # Show a navigation menu for unauthenticated users
-#     st.sidebar.page_link("app.py", label="Log in")
 
 
 def menu():
