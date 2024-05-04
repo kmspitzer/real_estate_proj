@@ -10,7 +10,7 @@ property_menu()
 # apply CSS for table display
 apply_custom_css()
 
-st.title("Real Estate Managment System")
+st.title("Real Estate Management System")
 
 # button to reset the view and select another agent
 if st.button('Refresh Properties'):

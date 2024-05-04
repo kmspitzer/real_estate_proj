@@ -126,11 +126,13 @@ def property_form(action, data):
                 if action == "Add":
                     # call function to insert the record into the database
                     success = insert_property(data)
+                    report_action = "added"
                 else:
                     # call function to update record in database
                     success = update_property(data)
+                    report_action = "updated"
                 
                 if success:
-                    st.success(f"Property {action.lower()}ed.")
+                    st.success(f"Property {report_action}.")
                 else:
                     st.error("An error occurred while adding the property.")

@@ -114,11 +114,13 @@ def client_form(action, data):
                 if action == "Add":
                     # call function to insert the record into the database
                     success = insert_client(data)
+                    report_action = "added"
                 else:
                     # call function to update the record in the database
                     success = update_client(data)
+                    report_action = "updated"
                     
                 if success:
-                    st.success(f"Client {action.lower()}ed.")
+                    st.success(f"Client {report_action}.")
                 else:
                     st.error("An error occurred while adding the client.")

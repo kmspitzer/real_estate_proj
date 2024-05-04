@@ -4,7 +4,7 @@ from utilities.db_utils import *
 from utilities.real_estate_utils import *
 
 appointment_menu()
-st.title("Real Estate Managment System")
+st.title("Real Estate Management System")
 
 
 # apply CSS for table display

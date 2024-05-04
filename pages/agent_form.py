@@ -89,10 +89,12 @@ def agent_form(action, data):
                 # call function to insert/update record in db
                 if action == "Add":
                     success = insert_agent(data)
+                    report_action = 'added'
                 else:
                     success = update_agent(data)
+                    report_action = 'updated'
 
                 if success:
-                    st.success(f"Agent {action.lower()}ed.")
+                    st.success(f"Agent {report_action}.")
                 else:
                     st.error("An error occurred while adding the agent.")

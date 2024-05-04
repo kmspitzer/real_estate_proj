@@ -111,11 +111,13 @@ def appointment_form(action, data):
                 if action == "Add":
                     # call function to insert the record into the database
                     success = insert_appointment(data)
+                    report_action = "added"
                 else:
                     # call function to update record in the database
                     success = update_appointment(data)
+                    report_action = "updated"
 
                 if success:
-                    st.success(f"Appointment {action.lower()}ed.")
+                    st.success(f"Appointment {report_action}.")
                 else:
                     st.error("An error occurred while adding the appointment.")
